@@ -7,7 +7,6 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Columns3,
-  LayoutGrid,
   List,
   Loader2,
   MapPin,
@@ -16,7 +15,6 @@ import {
   SlidersHorizontal,
   Trash2,
   UserRound,
-  Wallet,
   X,
   XCircle,
 } from "lucide-react"
@@ -46,12 +44,11 @@ interface Service {
 }
 
 type StatusFilter = "all" | "pending" | "approved" | "rejected"
-type ViewMode = "grid" | "list" | "kanban"
+type ViewMode = "list" | "kanban"
 
 const STATUSES = ["pending", "approved", "rejected"] as const
 
-const VIEWS: { id: ViewMode; label: string; icon: typeof LayoutGrid }[] = [
-  { id: "grid", label: "Grid", icon: LayoutGrid },
+const VIEWS: { id: ViewMode; label: string; icon: typeof List }[] = [
   { id: "list", label: "List", icon: List },
   { id: "kanban", label: "Board", icon: Columns3 },
 ]
@@ -68,7 +65,7 @@ export default function AdminServicesPage() {
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
-  const [viewMode, setViewMode] = useState<ViewMode>("grid")
+  const [viewMode, setViewMode] = useState<ViewMode>("kanban")
   const [deleteTarget, setDeleteTarget] = useState<Service | null>(null)
   const { data: session } = authClient.useSession()
   const isAdmin =
@@ -307,87 +304,6 @@ export default function AdminServicesPage() {
           <Trash2 size={14} />
           Delete
         </button>
-      </div>
-    )
-  }
-
-  function renderMeta(service: Service) {
-    return (
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-500 dark:text-[#9BBEC8]">
-        <span className="inline-flex items-center gap-1.5">
-          <MapPin size={14} />
-          {service.location || "—"}
-        </span>
-        <span className="inline-flex items-center gap-1.5 font-semibold text-[#164863] dark:text-[#DDF2FD]">
-          <Wallet size={14} />৳{Number(service.price).toLocaleString("en-BD")}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <UserRound size={14} />
-          {service.vendor?.name ||
-            service.vendor?.businessName ||
-            "WedPlan Vendor"}
-        </span>
-      </div>
-    )
-  }
-
-  function renderImage(service: Service) {
-    return (
-      <div className="relative h-40 shrink-0 overflow-hidden bg-[#DDF2FD] md:h-full md:min-h-28 md:w-40 dark:bg-[#0B1922]">
-        {service.images?.[0] ? (
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-            style={{ backgroundImage: `url("${service.images[0]}")` }}
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-[#427D9D]">
-            <BriefcaseBusiness size={36} />
-          </div>
-        )}
-        <span
-          className={`absolute top-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-bold capitalize shadow-sm dark:bg-[#122B3A]/90 ${statusStyle(service.status)}`}
-        >
-          {service.status}
-        </span>
-      </div>
-    )
-  }
-
-  function renderGrid() {
-    return (
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {filteredServices.map((service, index) => (
-          <motion.article
-            key={service._id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: Math.min(index * 0.04, 0.3) }}
-            whileHover={{ y: -6 }}
-            className="group overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-[#427D9D]/50 hover:shadow-xl hover:shadow-[#164863]/10 dark:bg-[#122B3A]"
-          >
-            {renderImage(service)}
-            <div className="space-y-3 p-5">
-              <div>
-                <h3 className="truncate font-bold text-[#164863] dark:text-[#DDF2FD]">
-                  {service.name}
-                </h3>
-                <p className="mt-1 text-xs font-medium text-[#427D9D]">
-                  {service.category}
-                </p>
-              </div>
-              {renderMeta(service)}
-              <p className="text-xs text-gray-400">
-                Submitted{" "}
-                {service.createdAt
-                  ? new Date(service.createdAt).toLocaleDateString()
-                  : "—"}
-              </p>
-              <div className="border-t border-[#9BBEC8]/30 pt-4">
-                {renderActions(service)}
-              </div>
-            </div>
-          </motion.article>
-        ))}
       </div>
     )
   }
@@ -756,8 +672,6 @@ export default function AdminServicesPage() {
             </button>
           )}
         </div>
-      ) : viewMode === "grid" ? (
-        renderGrid()
       ) : viewMode === "list" ? (
         renderList()
       ) : (

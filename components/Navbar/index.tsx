@@ -88,6 +88,9 @@ export default function Navbar() {
         ? "/admin/dashboard"
         : "/customer/dashboard"
 
+  // Admin pages render their own AdminHeader — avoid a duplicate navbar.
+  if (pathname?.startsWith("/admin")) return null
+
   async function handleLogout() {
     await authClient.signOut()
     setProfileOpen(false)

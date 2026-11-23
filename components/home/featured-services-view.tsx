@@ -209,22 +209,7 @@ export default function FeaturedServicesView({
           </motion.div>
         )}
 
-        {/* Bottom */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-10 text-center"
-        >
-          <Link
-            href="/services?category=Photography%2CVideography"
-            className="inline-flex items-center gap-2 rounded-full border-2 border-[#164863] px-7 py-3 font-semibold text-[#164863] transition-all hover:bg-[#164863] hover:text-white dark:text-[#DDF2FD]"
-          >
-            Explore Photography & Videography
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </motion.div>
+        
       </div>
     </section>
   )

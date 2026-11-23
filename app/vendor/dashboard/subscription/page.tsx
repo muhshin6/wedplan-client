@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Crown,
   ShieldCheck,
+  Loader2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -62,6 +63,7 @@ export default function SubscriptionPage() {
   const [currentPlanData, setCurrentPlanData] = useState<Plan | null>(null)
   const [upgrading, setUpgrading] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"plans" | "billing">("plans")
+  const [confirmingPayment, setConfirmingPayment] = useState(false)
 
   useEffect(() => {
     async function loadSubscription() {
@@ -87,6 +89,67 @@ export default function SubscriptionPage() {
 
     void loadSubscription()
   }, [])
+
+  // After returning from Stripe, poll the read-only status endpoint until the
+  // server-side webhook confirms the payment, then refresh the session so the
+  // purchased plan shows as current. This never activates a plan client-side.
+  useEffect(() => {
+    const sessionId = new URLSearchParams(window.location.search).get(
+      "session_id"
+    )
+
+    if (!sessionId) return
+
+    const paymentSessionId = sessionId
+    let cancelled = false
+    let attempts = 0
+
+    async function pollForConfirmation() {
+      if (!cancelled) setConfirmingPayment(true)
+
+      try {
+        const response = await fetch(
+          `${API_URL}/api/payment/status?session_id=${encodeURIComponent(paymentSessionId)}`,
+          { credentials: "include" }
+        )
+
+        const result = await response.json()
+
+        if (!cancelled && result.status === "success") {
+          await authClient.getSession()
+          setCurrentPlan(result.data.plan)
+
+          const subResponse = await fetch(`${API_URL}/api/subscription`, {
+            credentials: "include",
+            cache: "no-store",
+          })
+          const subResult = await subResponse.json()
+
+          if (subResult.success) setCurrentPlanData(subResult.data)
+
+          if (!cancelled) setConfirmingPayment(false)
+          router.refresh()
+          window.history.replaceState({}, "", window.location.pathname)
+          return
+        }
+      } catch {
+        // keep polling
+      }
+
+      if (!cancelled && attempts < 20) {
+        attempts += 1
+        window.setTimeout(() => void pollForConfirmation(), 2000)
+      } else if (!cancelled) {
+        setConfirmingPayment(false)
+      }
+    }
+
+    void pollForConfirmation()
+
+    return () => {
+      cancelled = true
+    }
+  }, [router])
 
   async function handleUpgrade(planId: string) {
     if (planId === currentPlan || planId === "free") return
@@ -195,6 +258,14 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Current plan */}
+      {confirmingPayment && (
+        <div className="flex items-center gap-3 rounded-xl border border-[#427D9D]/30 bg-white/80 px-4 py-3 text-sm text-[#164863]">
+          <Loader2 className="h-4 w-4 animate-spin text-[#427D9D]" />
+          Confirming your payment with Stripe. Your plan will update as soon as
+          the payment is verified.
+        </div>
+      )}
+
       <Card className="rounded-2xl border border-[#9BBEC8]/40 bg-[#164863]/5 p-6">
         <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>

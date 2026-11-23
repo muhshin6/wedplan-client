@@ -88,17 +88,20 @@ function PaymentSuccessContent() {
 
   const isVerified = payment?.status === "success"
 
-  // After a verified payment, go straight back to the subscription page so
-  // the newly purchased plan is shown as selected.
+  // Always go straight back to the subscription page after checkout —
+  // even if the webhook is still processing. The subscription page polls
+  // for the verified result and shows the plan when Stripe confirms it.
   useEffect(() => {
-    if (!isVerified) return
+    if (loading || !sessionId) return
 
     const timer = window.setTimeout(() => {
-      router.replace("/vendor/dashboard/subscription")
-    }, 2500)
+      router.replace(
+        `/vendor/dashboard/subscription?session_id=${encodeURIComponent(sessionId)}`
+      )
+    }, 1200)
 
     return () => window.clearTimeout(timer)
-  }, [isVerified, router])
+  }, [loading, sessionId, router])
 
   return (
     <main className="flex min-h-[70vh] items-center justify-center bg-[#DDF2FD]/40 px-4">

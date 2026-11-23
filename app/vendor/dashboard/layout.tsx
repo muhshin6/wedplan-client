@@ -1,6 +1,12 @@
 import VendorSidebar from "@/components/vendor/vendor-sidebar"
 import RoleGuard from "@/components/auth/role-guard"
+import type { Metadata } from "next"
 import type { ReactNode } from "react"
+
+export const metadata: Metadata = {
+  title: "Vendor Dashboard",
+  description: "Manage your WedPlan vendor account, services and bookings.",
+}
 
 interface VendorDashboardLayoutProps {
   children: ReactNode

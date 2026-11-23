@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
@@ -15,6 +15,7 @@ import {
 import AuthRedirect from "@/components/auth/auth-redirect"
 import { Button } from "@/components/ui/button"
 import { API_URL } from "@/lib/api"
+import { authClient } from "@/lib/auth-client"
 
 interface PaymentInfo {
   planName?: string
@@ -25,6 +26,7 @@ interface PaymentInfo {
 }
 
 function PaymentSuccessContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const sessionId = searchParams.get("session_id")
 
@@ -59,6 +61,12 @@ function PaymentSuccessContent() {
         if (!ignore) {
           setPayment(result.data || null)
           setMessage(result.message || "")
+
+          // Refresh the cached client session so the Navbar and other
+          // components immediately reflect the webhook-activated plan.
+          if (result.status === "success") {
+            await authClient.getSession()
+          }
         }
       } catch (error) {
         if (!ignore) {
@@ -79,6 +87,18 @@ function PaymentSuccessContent() {
   }, [sessionId])
 
   const isVerified = payment?.status === "success"
+
+  // After a verified payment, go straight back to the subscription page so
+  // the newly purchased plan is shown as selected.
+  useEffect(() => {
+    if (!isVerified) return
+
+    const timer = window.setTimeout(() => {
+      router.replace("/vendor/dashboard/subscription")
+    }, 2500)
+
+    return () => window.clearTimeout(timer)
+  }, [isVerified, router])
 
   return (
     <main className="flex min-h-[70vh] items-center justify-center bg-[#DDF2FD]/40 px-4">
@@ -117,7 +137,7 @@ function PaymentSuccessContent() {
           {loading
             ? "Please wait while we confirm your payment with Stripe."
             : isVerified
-              ? "Your subscription is active. Thank you for upgrading your WedPlan account!"
+              ? "Your subscription is active. Redirecting you to your subscription..."
               : message ||
                 "Your payment is being verified. Your plan will update automatically once Stripe confirms it."}
         </p>

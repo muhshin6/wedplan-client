@@ -52,9 +52,14 @@ const planDetails: Record<string, { price: string; description: string }> = {
 
 export default function SubscriptionPage() {
   const router = useRouter()
-  const [currentPlan, setCurrentPlan] = useState("free")
+  const { data: session } = authClient.useSession()
+
+  // Seed from the session so the correct plan shows immediately instead of
+  // flashing "Free" / "Loading..." while the API request is in flight.
+  const sessionPlan =
+    (session?.user as { plan?: string } | undefined)?.plan || "free"
+  const [currentPlan, setCurrentPlan] = useState(sessionPlan)
   const [currentPlanData, setCurrentPlanData] = useState<Plan | null>(null)
-  const [loading, setLoading] = useState(true)
   const [upgrading, setUpgrading] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"plans" | "billing">("plans")
 
@@ -77,8 +82,6 @@ export default function SubscriptionPage() {
         const session = await authClient.getSession()
         const plan = (session.data?.user as { plan?: string } | undefined)?.plan
         if (plan) setCurrentPlan(plan)
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -201,7 +204,7 @@ export default function SubscriptionPage() {
             </CardDescription>
           </div>
           <Badge className="bg-[#164863] px-4 py-1.5 text-xs tracking-wider text-[#DDF2FD] uppercase">
-            {loading ? "Loading..." : currentPlan}
+            {currentPlan}
           </Badge>
         </CardHeader>
         <CardContent className="pt-2">
@@ -211,9 +214,15 @@ export default function SubscriptionPage() {
                 Active service limit
               </p>
               <p className="mt-1 text-2xl font-bold text-[#164863]">
-                {currentPlanData?.maxActiveServices === null
-                  ? "Unlimited"
-                  : `${currentPlanData?.maxActiveServices ?? 3} services`}
+                {currentPlanData
+                  ? currentPlanData.maxActiveServices === null
+                    ? "Unlimited"
+                    : `${currentPlanData.maxActiveServices} services`
+                  : currentPlan === "premium"
+                    ? "Unlimited"
+                    : currentPlan === "basic"
+                      ? "10 services"
+                      : "3 services"}
               </p>
             </div>
             <div className="rounded-xl border border-[#9BBEC8]/30 bg-white/70 p-4">
@@ -221,7 +230,8 @@ export default function SubscriptionPage() {
                 Premium Vendor Badge
               </p>
               <p className="mt-1 flex items-center gap-2 text-2xl font-bold text-[#164863]">
-                {currentPlanData?.hasPremiumBadge ? (
+                {currentPlanData?.hasPremiumBadge ||
+                currentPlan === "premium" ? (
                   <>
                     <ShieldCheck className="h-6 w-6 text-[#427D9D]" /> Active
                   </>

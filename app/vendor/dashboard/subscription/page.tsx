@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { authClient } from "@/lib/auth-client"
-import { API_URL } from "@/lib/api"
+import { apiFetch } from "@/lib/api"
 import {
   CreditCard,
   History,
@@ -15,6 +15,7 @@ import {
   Crown,
   ShieldCheck,
   Loader2,
+  CheckCircle2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -28,6 +29,17 @@ import {
 } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+
+interface BillingRecord {
+  _id: string
+  plan: string
+  planName?: string
+  amount: number
+  currency?: string
+  status: string
+  createdAt: string
+  stripeSessionId?: string
+}
 
 interface Plan {
   id: string
@@ -64,12 +76,14 @@ export default function SubscriptionPage() {
   const [upgrading, setUpgrading] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<"plans" | "billing">("plans")
   const [confirmingPayment, setConfirmingPayment] = useState(false)
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
+  const [billingRecords, setBillingRecords] = useState<BillingRecord[]>([])
+  const [billingLoading, setBillingLoading] = useState(false)
 
   useEffect(() => {
     async function loadSubscription() {
       try {
-        const response = await fetch(`${API_URL}/api/subscription`, {
-          credentials: "include",
+        const response = await apiFetch(`/api/subscription`, {
           cache: "no-store",
         })
 
@@ -108,9 +122,8 @@ export default function SubscriptionPage() {
       if (!cancelled) setConfirmingPayment(true)
 
       try {
-        const response = await fetch(
-          `${API_URL}/api/payment/status?session_id=${encodeURIComponent(paymentSessionId)}`,
-          { credentials: "include" }
+        const response = await apiFetch(
+          `/api/payment/status?session_id=${encodeURIComponent(paymentSessionId)}`
         )
 
         const result = await response.json()
@@ -119,15 +132,17 @@ export default function SubscriptionPage() {
           await authClient.getSession()
           setCurrentPlan(result.data.plan)
 
-          const subResponse = await fetch(`${API_URL}/api/subscription`, {
-            credentials: "include",
+          const subResponse = await apiFetch(`/api/subscription`, {
             cache: "no-store",
           })
           const subResult = await subResponse.json()
 
           if (subResult.success) setCurrentPlanData(subResult.data)
 
-          if (!cancelled) setConfirmingPayment(false)
+          if (!cancelled) {
+            setConfirmingPayment(false)
+            setPaymentConfirmed(true)
+          }
           router.refresh()
           window.history.replaceState({}, "", window.location.pathname)
           return
@@ -151,6 +166,33 @@ export default function SubscriptionPage() {
     }
   }, [router])
 
+  // Load the vendor's own billing history (read-only from the server)
+  useEffect(() => {
+    let ignore = false
+
+    async function loadBillingHistory() {
+      try {
+        const response = await apiFetch(`/api/payment/my-transactions`)
+
+        const result = await response.json()
+
+        if (response.ok && result.success && !ignore) {
+          setBillingRecords(result.data)
+        }
+      } catch {
+        // billing history is optional information
+      } finally {
+        if (!ignore) setBillingLoading(false)
+      }
+    }
+
+    void loadBillingHistory()
+
+    return () => {
+      ignore = true
+    }
+  }, [])
+
   async function handleUpgrade(planId: string) {
     if (planId === currentPlan) return
 
@@ -163,15 +205,10 @@ export default function SubscriptionPage() {
     setUpgrading(planId)
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/payment/create-checkout-session`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ plan: planId }),
-        }
-      )
+      const response = await apiFetch(`/api/payment/create-checkout-session`, {
+        method: "POST",
+        body: JSON.stringify({ plan: planId }),
+      })
 
       const result = await response.json()
 
@@ -194,10 +231,9 @@ export default function SubscriptionPage() {
     setUpgrading("cancel")
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/payment/cancel-subscription`,
-        { method: "POST", credentials: "include" }
-      )
+      const response = await apiFetch(`/api/payment/cancel-subscription`, {
+        method: "POST",
+      })
 
       const result = await response.json()
 
@@ -264,6 +300,13 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Current plan */}
+      {paymentConfirmed && (
+        <div className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+          Payment successful! Your new plan is now active below.
+        </div>
+      )}
+
       {confirmingPayment && (
         <div className="flex items-center gap-3 rounded-xl border border-[#427D9D]/30 bg-white/80 px-4 py-3 text-sm text-[#164863]">
           <Loader2 className="h-4 w-4 animate-spin text-[#427D9D]" />
@@ -499,16 +542,66 @@ export default function SubscriptionPage() {
           <h3 className="mb-4 text-lg font-bold text-[#164863]">
             Billing History
           </h3>
-          <Card className="rounded-xl border border-[#9BBEC8]/40 p-6">
-            <div className="flex flex-col items-center justify-center py-10 text-center">
-              <History className="mb-3 h-8 w-8 text-[#9BBEC8]/40" />
-              <p className="text-sm text-[#164863]/60">
-                No billing records yet.
-              </p>
-              <p className="mt-1 text-xs text-[#427D9D]/50">
-                Invoices will appear here after payments are enabled.
-              </p>
-            </div>
+          <Card className="overflow-hidden rounded-xl border border-[#9BBEC8]/40">
+            {billingLoading ? (
+              <div className="flex items-center justify-center py-10">
+                <Loader2 className="h-6 w-6 animate-spin text-[#427D9D]" />
+              </div>
+            ) : billingRecords.length === 0 ? (
+              <div className="flex flex-col items-center justify-center px-6 py-10 text-center">
+                <History className="mb-3 h-8 w-8 text-[#9BBEC8]/40" />
+                <p className="text-sm text-[#164863]/60">
+                  No billing records yet.
+                </p>
+                <p className="mt-1 text-xs text-[#427D9D]/50">
+                  Your subscription payments will appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-150 text-left">
+                  <thead className="bg-[#F4F8FB]">
+                    <tr>
+                      <th className="px-4 py-3 text-xs font-semibold tracking-wider text-[#427D9D] uppercase">
+                        Plan
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold tracking-wider text-[#427D9D] uppercase">
+                        Amount
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold tracking-wider text-[#427D9D] uppercase">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold tracking-wider text-[#427D9D] uppercase">
+                        Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#9BBEC8]/20">
+                    {billingRecords.map((record) => (
+                      <tr key={record._id} className="hover:bg-[#F8FBFD]">
+                        <td className="px-4 py-3 text-sm font-semibold text-[#164863] capitalize">
+                          {record.planName || record.plan}
+                        </td>
+                        <td className="px-4 py-3 text-sm font-bold text-[#164863]">
+                          ৳{Number(record.amount).toLocaleString("en-BD")}
+                          <span className="ml-1 text-xs font-normal text-[#427D9D]">
+                            {record.currency || "BDT"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700 capitalize">
+                            {record.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm text-[#427D9D]">
+                          {new Date(record.createdAt).toLocaleDateString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </Card>
         </div>
       )}

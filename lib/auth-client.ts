@@ -2,8 +2,9 @@ import { createAuthClient } from "better-auth/react"
 import { inferAdditionalFields, jwtClient } from "better-auth/client/plugins"
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-
+  // No baseURL: requests use relative `/api/auth` paths and are proxied to
+  // the backend by the rewrite in next.config.ts. The session cookie is then
+  // first-party on this app's origin.
   fetchOptions: {
     credentials: "include",
   },

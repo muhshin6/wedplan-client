@@ -42,7 +42,11 @@ npm run dev       # http://localhost:3000
 
 The backend (`wedplan-server`) must be running at `http://localhost:5000` for auth and data features to work. Without it, pages fail silently.
 
-> **Local vs production:** if `.env` points `NEXT_PUBLIC_API_URL` at the deployed backend, local sign-in will fail — cookies are issued for the deployed domain. Create a gitignored `.env.local` with `NEXT_PUBLIC_API_URL=http://localhost:5000` for local development; Next.js gives `.env.local` priority over `.env`.
+> **Local vs production:** for local development create a gitignored `.env.local` with `NEXT_PUBLIC_API_URL=http://localhost:5000` so the proxy rewrite targets the local backend. Next.js gives `.env.local` priority over `.env`.
+
+## How API requests reach the backend
+
+Every `/api/*` request is proxied to the backend by the `beforeFiles` rewrite in `next.config.ts`. In the browser, `lib/api.ts` sets `API_URL` to this app's own origin and `authClient` uses relative `/api/auth` paths, so requests are **same-origin** and the Better Auth session cookie is stored first-party. This avoids third-party cookie blocking and cross-origin credential problems when the client and backend are on different Vercel subdomains. Server-side code (e.g. `generateMetadata`) uses the absolute backend URL directly.
 
 ## Production deployment
 
@@ -52,9 +56,9 @@ Set in your hosting provider's (e.g. Vercel) environment variables:
 NEXT_PUBLIC_API_URL=https://wedplan-server-sepia.vercel.app
 ```
 
-All client API calls go through `lib/api.ts` (`API_URL`), so this single variable points the whole app at the deployed backend. There are no hardcoded backend URLs in the source.
+This single variable drives both the proxy rewrite target and server-side fetches. There are no hardcoded backend URLs in the source.
 
-The deployed backend must also trust the client origin — set `CLIENT_URL=https://<client-domain>` and `BETTER_AUTH_URL=https://<server-domain>` there.
+The deployed backend must also trust the client origin — set `CLIENT_URL=https://<client-domain>` and `BETTER_AUTH_URL=https://<server-domain>` there. The client origin is forwarded by the rewrite, so the backend's CORS/trusted-origins must allow it.
 
 Google OAuth redirect URIs (register **both** on the same OAuth client):
 

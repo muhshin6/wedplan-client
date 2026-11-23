@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 
 import { authClient } from "@/lib/auth-client"
+import { API_URL } from "@/lib/api"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 
@@ -78,7 +79,7 @@ export default function SignInPage() {
 
       if (!verified?.data?.user) {
         setError(
-          "Signed in, but the session could not be verified. Please check that the backend URL and CORS settings are configured, then try again."
+          `Signed in, but the session could not be verified (origin: ${API_URL}). Make sure NEXT_PUBLIC_API_URL points to the backend and both apps are redeployed.`
         )
         return
       }

@@ -1,5 +1,11 @@
+// In the browser, point at this app's own origin so every `/api/...` call is
+// proxied to the backend by the rewrite in next.config.ts. That keeps the
+// session cookie first-party. On the server (e.g. generateMetadata) there is
+// no proxy, so fetch the backend directly.
 export const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+    : window.location.origin
 
 // Obtain a short-lived JWT from Better Auth and attach it as a Bearer token.
 // The token is issued from the auth cookie-backed session — the client never

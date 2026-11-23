@@ -12,12 +12,12 @@ import {
   Clock,
   Plus,
   ArrowUpRight,
-  Sparkles,
   BadgeCheck,
   ClipboardList,
   Settings,
   LogOut,
   Crown,
+  Loader2,
 } from "lucide-react"
 
 // Service Type
@@ -197,7 +197,7 @@ function VendorDashboardContent() {
         <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-center">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-[#DDF2FD]">
-              <Sparkles className="h-3.5 w-3.5" />
+              <BriefcaseBusiness className="h-3.5 w-3.5" />
               Vendor Workspace
             </div>
 
@@ -235,9 +235,17 @@ function VendorDashboardContent() {
             </p>
           </div>
 
-          <span className="rounded-full bg-[#DDF2FD] px-3 py-1 text-xs font-medium text-[#164863] dark:bg-[#164863]/30 dark:text-[#DDF2FD]">
-            Overview
-          </span>
+          <div className="flex items-center gap-2">
+            {bookingLoading && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-[#427D9D]">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading data...
+              </span>
+            )}
+            <span className="rounded-full bg-[#DDF2FD] px-3 py-1 text-xs font-medium text-[#164863] dark:bg-[#164863]/30 dark:text-[#DDF2FD]">
+              Overview
+            </span>
+          </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

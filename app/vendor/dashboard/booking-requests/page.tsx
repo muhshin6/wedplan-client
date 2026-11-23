@@ -14,6 +14,7 @@ import {
   MapPin,
   BriefcaseBusiness,
   Wallet,
+  Loader2,
 } from "lucide-react"
 
 import { toast } from "sonner"
@@ -379,9 +380,13 @@ export default function BookingRequestsPage() {
                       disabled={updatingBookingId === booking._id}
                       className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <Check className="h-4 w-4" />
+                      {updatingBookingId === booking._id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Check className="h-4 w-4" />
+                      )}
                       {updatingBookingId === booking._id
-                        ? "Updating..."
+                        ? "Processing..."
                         : "Accept Booking"}
                     </button>
                     <button
@@ -391,7 +396,11 @@ export default function BookingRequestsPage() {
                       disabled={updatingBookingId === booking._id}
                       className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      <X className="h-4 w-4" />
+                      {updatingBookingId === booking._id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <X className="h-4 w-4" />
+                      )}
                       Reject
                     </button>
                   </div>

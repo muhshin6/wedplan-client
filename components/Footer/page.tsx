@@ -10,7 +10,6 @@ const navLinks = [
   { name: "Browse Services", href: "/services" },
   { name: "Sign In", href: "/sign-in" },
   { name: "Sign Up", href: "/sign-up" },
-  { name: "Become a Vendor", href: "/vendor-sign-up" },
 ]
 
 const contactInfo = [

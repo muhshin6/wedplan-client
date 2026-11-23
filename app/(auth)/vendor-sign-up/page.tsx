@@ -487,7 +487,10 @@ export default function VendorSignUpPage() {
                 className="group h-14 w-full rounded-xl bg-[#164863] text-base font-bold text-white shadow-lg shadow-[#164863]/15 transition-all hover:bg-[#427D9D] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {isLoading ? (
-                  "Creating Account..."
+                  <span className="flex items-center justify-center gap-2">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Creating Account...
+                  </span>
                 ) : (
                   <span className="flex items-center justify-center gap-2">
                     Create Vendor Account

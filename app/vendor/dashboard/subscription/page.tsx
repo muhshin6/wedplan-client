@@ -373,9 +373,14 @@ export default function SubscriptionPage() {
                 variant="outline"
                 className="border-red-200 text-red-600 hover:bg-red-50"
               >
-                {upgrading === "cancel"
-                  ? "Canceling..."
-                  : "Cancel Subscription"}
+                {upgrading === "cancel" ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Canceling...
+                  </>
+                ) : (
+                  "Cancel Subscription"
+                )}
               </Button>
             </div>
           )}
@@ -469,7 +474,10 @@ export default function SubscriptionPage() {
                       {isCurrent ? (
                         "Current Plan"
                       ) : upgrading === plan.id ? (
-                        "Upgrading..."
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Upgrading...
+                        </>
                       ) : isPremium ? (
                         <>
                           Upgrade to Premium

@@ -406,7 +406,11 @@ function ProfileForm({ user }: { user: ProfileUser }) {
               disabled={savingProfile}
               className="flex items-center gap-2 bg-[#164863] text-[#DDF2FD] hover:bg-[#427D9D]"
             >
-              <Save className="h-4 w-4" />
+              {savingProfile ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
               {savingProfile ? "Saving..." : "Save Changes"}
             </Button>
           </form>
@@ -506,7 +510,11 @@ function ProfileForm({ user }: { user: ProfileUser }) {
               disabled={savingPassword}
               className="flex items-center gap-2 bg-[#164863] text-[#DDF2FD] hover:bg-[#427D9D]"
             >
-              <KeyRound className="h-4 w-4" />
+              {savingPassword ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <KeyRound className="h-4 w-4" />
+              )}
               {savingPassword ? "Updating..." : "Update Password"}
             </Button>
           </form>

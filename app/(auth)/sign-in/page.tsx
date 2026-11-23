@@ -59,7 +59,7 @@ export default function SignInPage() {
     setIsLoading(true)
 
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
       })
@@ -69,16 +69,27 @@ export default function SignInPage() {
         return
       }
 
-      // Refresh the shared session so the Navbar updates immediately
+      // Refresh the shared session and verify the cookie actually persisted.
       await authClient.getSession()
+
+      const verified = await authClient.getSession({
+        fetchOptions: { cache: "no-store" },
+      })
+
+      if (!verified?.data?.user) {
+        setError(
+          "Signed in, but the session could not be verified. Please check that the backend URL and CORS settings are configured, then try again."
+        )
+        return
+      }
 
       toast.success("Signed in successfully!")
 
-      const user = data.user as typeof data.user & {
-        role?: string
-      }
+      const user = verified.data.user as { role?: string }
 
-      if (user.role === "vendor") {
+      if (user.role === "admin") {
+        router.push("/admin/dashboard")
+      } else if (user.role === "vendor") {
         router.push("/vendor/dashboard")
       } else {
         router.push("/customer/dashboard")
@@ -92,7 +103,7 @@ export default function SignInPage() {
 
   return (
     <main className="min-h-screen bg-[#DDF2FD] p-4 md:p-6 lg:p-8">
-      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white dark:bg-[#122B3A] shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white shadow-2xl shadow-[#164863]/10 lg:grid-cols-2 dark:bg-[#122B3A]">
         {/* LEFT SIDE - VISUAL */}
 
         <section className="relative hidden overflow-hidden bg-[#164863] p-12 lg:flex lg:flex-col lg:justify-between">
@@ -111,7 +122,7 @@ export default function SignInPage() {
             className="relative z-10"
           >
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#122B3A]/15 backdrop-blur-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white backdrop-blur-md dark:bg-[#122B3A]/15">
                 <Heart className="h-6 w-6 fill-[#DDF2FD] text-[#DDF2FD]" />
               </div>
 
@@ -140,7 +151,7 @@ export default function SignInPage() {
 
             {/* Decorative Card */}
 
-            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white dark:bg-[#122B3A]/10 p-5 backdrop-blur-xl">
+            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white p-5 backdrop-blur-xl dark:bg-[#122B3A]/10">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9BBEC8]/20">
                   <ShieldCheck className="h-6 w-6 text-[#DDF2FD]" />
@@ -227,7 +238,7 @@ export default function SignInPage() {
                     placeholder="you@example.com"
                     autoComplete="email"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10 dark:bg-[#122B3A] dark:bg-[#122B3A]/40 dark:text-[#DDF2FD]"
                   />
                 </div>
               </div>
@@ -255,7 +266,7 @@ export default function SignInPage() {
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-12 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-12 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10 dark:bg-[#122B3A] dark:bg-[#122B3A]/40 dark:text-[#DDF2FD]"
                   />
 
                   <button
@@ -320,7 +331,7 @@ export default function SignInPage() {
                 variant="outline"
                 onClick={() => void handleGoogleSignIn()}
                 disabled={googleLoading || isLoading}
-                className="h-14 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] dark:text-[#DDF2FD] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922]"
+                className="h-14 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922] dark:text-[#DDF2FD]"
               >
                 {googleLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -358,7 +369,7 @@ export default function SignInPage() {
               Don't have an account?{" "}
               <Link
                 href="/sign-up"
-                className="font-bold text-[#164863] dark:text-[#DDF2FD] transition-colors hover:text-[#427D9D]"
+                className="font-bold text-[#164863] transition-colors hover:text-[#427D9D] dark:text-[#DDF2FD]"
               >
                 Create an account
               </Link>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import { API_URL } from "@/lib/api"
 import {
   ArrowRight,
   CalendarDays,
@@ -138,7 +139,7 @@ function CustomerDashboardContent() {
     async function fetchCustomerBookings() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/bookings/customer/my-bookings",
+          `${API_URL}/api/bookings/customer/my-bookings`,
           {
             credentials: "include",
             signal: controller.signal,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import { API_URL } from "@/lib/api"
 import {
   Users,
   Store,
@@ -37,7 +38,7 @@ export default function AdminDashboardPage() {
 
   const fetchAdminStats = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/admin/stats", {
+      const response = await fetch(`${API_URL}/api/admin/stats`, {
         credentials: "include",
       })
 
@@ -68,7 +69,7 @@ export default function AdminDashboardPage() {
 
     const loadStats = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/admin/stats", {
+        const response = await fetch(`${API_URL}/api/admin/stats`, {
           credentials: "include",
         })
 

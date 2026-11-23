@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 import AuthRedirect from "@/components/auth/auth-redirect"
+import { API_URL } from "@/lib/api"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -76,12 +77,9 @@ function ServiceDetailsContent() {
 
     async function fetchService() {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/services/${id}`,
-          {
-            signal: controller.signal,
-          }
-        )
+        const response = await fetch(`${API_URL}/api/services/${id}`, {
+          signal: controller.signal,
+        })
 
         const result = await response.json()
 
@@ -141,7 +139,7 @@ function ServiceDetailsContent() {
     try {
       setIsSubmitting(true)
 
-      const response = await fetch("http://localhost:5000/api/bookings", {
+      const response = await fetch(`${API_URL}/api/bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import { API_URL } from "@/lib/api"
 import AuthRedirect from "@/components/auth/auth-redirect"
 
 interface Booking {
@@ -87,7 +88,7 @@ function CustomerBookingsContent() {
     async function fetchBookings() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/bookings/customer/my-bookings",
+          `${API_URL}/api/bookings/customer/my-bookings`,
           {
             credentials: "include",
             signal: controller.signal,
@@ -136,7 +137,7 @@ function CustomerBookingsContent() {
       setCancellingId(bookingId)
 
       const response = await fetch(
-        `http://localhost:5000/api/bookings/customer/my-bookings/${bookingId}/cancel`,
+        `${API_URL}/api/bookings/customer/my-bookings/${bookingId}/cancel`,
         {
           method: "PATCH",
           credentials: "include",

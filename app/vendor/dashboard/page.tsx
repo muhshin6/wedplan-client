@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import RoleGuard from "@/components/auth/role-guard"
 import { authClient } from "@/lib/auth-client"
+import { API_URL } from "@/lib/api"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
@@ -69,7 +70,7 @@ function VendorDashboardContent() {
     async function fetchServices() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/services/vendor/my-services",
+          `${API_URL}/api/services/vendor/my-services`,
           {
             method: "GET",
             credentials: "include",
@@ -101,7 +102,7 @@ function VendorDashboardContent() {
     async function fetchBookings() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/bookings/vendor/my-bookings",
+          `${API_URL}/api/bookings/vendor/my-bookings`,
           {
             method: "GET",
             credentials: "include",

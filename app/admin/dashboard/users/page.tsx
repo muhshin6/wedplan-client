@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import { API_URL } from "@/lib/api"
 import {
   Users,
   Search,
@@ -39,7 +40,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/admin/users", {
+      const response = await fetch(`${API_URL}/api/admin/users`, {
         credentials: "include",
       })
 
@@ -71,15 +72,12 @@ export default function AdminUsersPage() {
     setUpdatingId(id)
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/admin/users/${id}/block`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ isBlocked: !user.isBlocked }),
-        }
-      )
+      const response = await fetch(`${API_URL}/api/admin/users/${id}/block`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isBlocked: !user.isBlocked }),
+      })
 
       const result = await response.json()
 

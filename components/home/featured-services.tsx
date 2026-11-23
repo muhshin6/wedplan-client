@@ -1,15 +1,13 @@
 import FeaturedServicesView, {
   type FeaturedService,
 } from "@/components/home/featured-services-view"
+import { API_URL } from "@/lib/api"
 
 async function getFeaturedServices(): Promise<FeaturedService[]> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"}/api/services/public`,
-      {
-        cache: "no-store",
-      }
-    )
+    const response = await fetch(`${API_URL}/api/services/public`, {
+      cache: "no-store",
+    })
 
     if (!response.ok) {
       throw new Error("Failed to fetch services")

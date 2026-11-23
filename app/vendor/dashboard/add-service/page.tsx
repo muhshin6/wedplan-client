@@ -6,6 +6,7 @@ import Link from "next/link"
 import { toast } from "sonner"
 import { motion } from "framer-motion"
 import { authClient } from "@/lib/auth-client"
+import { API_URL } from "@/lib/api"
 import { Crown, Info } from "lucide-react"
 import {
   ArrowLeft,
@@ -63,7 +64,7 @@ export default function AddServicePage() {
     async function loadActiveCount() {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/services/vendor/my-services",
+          `${API_URL}/api/services/vendor/my-services`,
           { credentials: "include", cache: "no-store" }
         )
 
@@ -135,7 +136,7 @@ export default function AddServicePage() {
 
       formData.append("image", file)
 
-      const response = await fetch("http://localhost:5000/api/upload/image", {
+      const response = await fetch(`${API_URL}/api/upload/image`, {
         method: "POST",
         credentials: "include",
         body: formData,
@@ -195,7 +196,7 @@ export default function AddServicePage() {
     setLoading(true)
 
     try {
-      const response = await fetch("http://localhost:5000/api/services", {
+      const response = await fetch(`${API_URL}/api/services`, {
         method: "POST",
         credentials: "include",
         headers: {

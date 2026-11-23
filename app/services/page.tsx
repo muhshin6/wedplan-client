@@ -1,6 +1,7 @@
 "use client"
 
 import ServiceDetailsLink from "@/components/auth/service-details-link"
+import { API_URL } from "@/lib/api"
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -33,8 +34,6 @@ interface Service {
   images: string[]
   vendor?: ServiceVendor | null
 }
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
 
 const COMBINED_CATEGORY = "Photography & Videography"
 

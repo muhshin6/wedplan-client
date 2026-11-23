@@ -1,85 +1,108 @@
 # WedPlan Client
 
-Next.js 16 App Router client for WedPlan — a wedding services marketplace connecting couples, vendors and administrators.
+Next.js 16 (App Router) client for **WedPlan** — a wedding services marketplace connecting couples, vendors and administrators.
 
-## Features
+## What's inside
 
-- **Public**: landing page, service browsing with search/category/location filters, service details, sign in/up (email + Google OAuth)
-- **Customers**: dashboard, booking requests with status tracking and cancellation
-- **Vendors**: dashboard, service management (create/update/delete/availability), booking request handling, subscriptions via Stripe Checkout, billing history, profile settings
-- **Admins**: platform overview, user management (search/filter/block), service moderation (approve/reject/delete), read-only transactions
+| Audience | Pages |
+|---|---|
+| Public | `/` landing, `/services` browse (search + category + location filters), `/services/[id]` details, `/sign-in`, `/sign-up`, `/vendor-sign-up` |
+| Customer | `/customer/dashboard`, `/customer/bookings` (track + cancel) |
+| Vendor | `/vendor/dashboard` (overview), `my-services` (create/update/delete/availability), `booking-requests` (accept/reject), `subscription` (Stripe + billing history), `profile` |
+| Admin | `/admin/dashboard` (stats), `users` (search/filter/block), `services` (approve/reject/delete), `transactions` (read-only) |
+| Shared | `/dashboard` role redirect, `/profile-settings`, `/payment/success`, `/payment/cancel` |
 
 ## Tech stack
 
-- Next.js 16 (App Router), React 19, TypeScript
-- Tailwind CSS v4, shadcn/ui (base-nova / Base UI)
-- Framer Motion animations
-- Better Auth client (session cookies + JWT bearer tokens)
-- Stripe Checkout (redirect flow, no card data handled client-side)
+- Next.js 16 App Router, React 19, TypeScript
+- Tailwind CSS v4 (CSS-first, no `tailwind.config`)
+- shadcn/ui — **base-nova** style built on `@base-ui/react` (add with `npx shadcn add <name>`)
+- Framer Motion — section reveals, card hovers, 404 page animations
+- `next-themes` — light/dark/system theme with a Navbar toggle and `D` hotkey
+- Better Auth client — session cookies + JWT bearer tokens
+- Stripe Checkout — redirect flow (no card data handled in the client)
 
 ## Getting started
 
 ```bash
 npm install
-cp .env.example .env   # or create .env (see below)
-npm run dev
 ```
 
-### Environment variables
-
-Create `.env` in the project root (never commit it):
+Create `.env` in the project root (gitignored — never commit it):
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
-The backend runs separately (`wedplan-server`) at `http://localhost:5000`. Authentication and data features require it to be running.
+Then:
 
-> Secrets (Stripe secret key, Google OAuth secret, MongoDB credentials, ImgBB key) live **only** on the server. Never put them in `NEXT_PUBLIC_*` variables.
+```bash
+npm run dev       # http://localhost:3000
+```
+
+The backend (`wedplan-server`) must be running at `http://localhost:5000` for auth and data features to work. Without it, pages fail silently.
 
 ## Production deployment
 
-Set these in the hosting provider's (e.g. Vercel) project environment variables:
+Set in your hosting provider's (e.g. Vercel) environment variables:
 
 ```env
 NEXT_PUBLIC_API_URL=https://wedplan-server-sepia.vercel.app
 ```
 
-All client API calls go through `lib/api.ts` (`API_URL`), so this single variable points the whole app at the deployed backend. There is no need to hardcode the server URL anywhere — and secrets (Stripe, Google, MongoDB, ImgBB) must **never** be added to a `NEXT_PUBLIC_*` variable.
+All client API calls go through `lib/api.ts` (`API_URL`), so this single variable points the whole app at the deployed backend. There are no hardcoded backend URLs in the source.
 
-The deployed backend must also trust the client origin: set `CLIENT_URL=https://<your-client-domain>` and `BETTER_AUTH_URL=https://<your-server-domain>` on the server (its `trustedOrigins` includes `CLIENT_URL`).
+The deployed backend must also trust the client origin — set `CLIENT_URL=https://<client-domain>` and `BETTER_AUTH_URL=https://<server-domain>` there.
 
-## Authentication
+Google OAuth redirect URIs (register **both** on the same OAuth client):
 
-- `authClient` (`lib/auth-client.ts`) uses Better Auth with session cookies and the JWT plugin.
-- `lib/api.ts` attaches a short-lived `Authorization: Bearer <jwt>` token to protected API calls.
-- Route guards: `components/auth/auth-redirect.tsx` (any authenticated user) and `components/auth/role-guard.tsx` (specific role).
-- Unauthenticated users are redirected to `/sign-in`; wrong-role users get an access-denied state.
+```
+http://localhost:5000/api/auth/callback/google
+https://<deployed-server>/api/auth/callback/google
+```
 
-## Stripe flow
+> Secrets (Stripe secret/webhook keys, Google OAuth secret, MongoDB credentials, ImgBB key) live **only** on the server. Never put them in `NEXT_PUBLIC_*` variables.
 
-1. "Upgrade to Premium" → `POST /api/payment/create-checkout-session` (server creates the Checkout Session)
-2. Browser redirects to Stripe-hosted checkout
-3. Stripe redirects back to `/vendor/dashboard/subscription?session_id=...`
-4. The page polls a read-only status endpoint; only the **verified server webhook** activates the plan
-5. Transaction records are created server-side and shown in Billing History
+## Authentication & authorization
 
-## Error handling
+- `lib/auth-client.ts` — Better Auth client with `jwtClient()` + additional user fields (`role`, `plan`, `businessName`)
+- `lib/api.ts` — obtains a short-lived JWT from `/api/auth/token` and sends `Authorization: Bearer <jwt>`
+- `components/auth/auth-redirect.tsx` — requires any authenticated user, redirects guests to `/sign-in`
+- `components/auth/role-guard.tsx` — role-specific guard (`customer` / `vendor` / `admin`)
+- No middleware — route protection is client-side here; the backend independently verifies JWT + role on every protected API
 
-- `app/not-found.tsx` — 404 page
-- `app/error.tsx` / `app/global-error.tsx` — error boundaries with retry
-- `app/api/[...all]/route.ts` — JSON 404 for unmatched API routes
-- Forms and API calls show inline errors/toasts; loading skeletons and spinners cover async states
+## Payments
+
+1. "Upgrade to Premium" → `POST /api/payment/create-checkout-session`
+2. Redirect to Stripe-hosted Checkout
+3. Stripe returns to `/vendor/dashboard/subscription?session_id=...`
+4. The page polls a **read-only** status endpoint; only the verified server webhook activates the plan and records the transaction
+5. Billing history is fetched read-only from the server
+
+A frontend success redirect can never activate Premium.
+
+## Error handling & loading
+
+- `app/not-found.tsx` — animated 404
+- `app/error.tsx`, `app/global-error.tsx` — error boundaries with retry
+- `app/api/[...all]/route.ts` — JSON 404 for unknown API paths
+- `app/loading.tsx` and per-route `loading.tsx` skeletons; spinners on form submits, booking actions and payments
+- `lib/api.ts` `readApiError()` — consistent messages from failed requests
+
+## Theme
+
+`components/theme-provider.tsx` (`next-themes`, class attribute, system default) + `components/theme-toggle.tsx` in the Navbar. Dark styles are applied across public pages, dashboards and auth pages. The `D` key also toggles the theme.
 
 ## Verification
 
 ```bash
-npm run typecheck
-npm run lint
-npm run format
+npm run lint        # 1 pre-existing error + 1 warning (see AGENTS.md)
+npm run typecheck   # must pass
+npm run format      # Prettier over *.ts/tsx
+npm run build       # production build
 ```
 
-Lint has a small pre-existing baseline (unescaped apostrophe in the sign-in page and two generated shadcn hooks). No test runner is configured.
+There is no test runner configured in this repo.
 
 ## Repositories
 

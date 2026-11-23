@@ -37,6 +37,18 @@ The backend runs separately (`wedplan-server`) at `http://localhost:5000`. Authe
 
 > Secrets (Stripe secret key, Google OAuth secret, MongoDB credentials, ImgBB key) live **only** on the server. Never put them in `NEXT_PUBLIC_*` variables.
 
+## Production deployment
+
+Set these in the hosting provider's (e.g. Vercel) project environment variables:
+
+```env
+NEXT_PUBLIC_API_URL=https://wedplan-server-sepia.vercel.app
+```
+
+All client API calls go through `lib/api.ts` (`API_URL`), so this single variable points the whole app at the deployed backend. There is no need to hardcode the server URL anywhere — and secrets (Stripe, Google, MongoDB, ImgBB) must **never** be added to a `NEXT_PUBLIC_*` variable.
+
+The deployed backend must also trust the client origin: set `CLIENT_URL=https://<your-client-domain>` and `BETTER_AUTH_URL=https://<your-server-domain>` on the server (its `trustedOrigins` includes `CLIENT_URL`).
+
 ## Authentication
 
 - `authClient` (`lib/auth-client.ts`) uses Better Auth with session cookies and the JWT plugin.

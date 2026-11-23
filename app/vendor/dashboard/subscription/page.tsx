@@ -152,7 +152,13 @@ export default function SubscriptionPage() {
   }, [router])
 
   async function handleUpgrade(planId: string) {
-    if (planId === currentPlan || planId === "free") return
+    if (planId === currentPlan) return
+
+    // Free requires no payment — cancel the paid subscription instead.
+    if (planId === "free") {
+      await handleCancelSubscription()
+      return
+    }
 
     setUpgrading(planId)
 

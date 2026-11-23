@@ -33,7 +33,7 @@ export default function ErrorPage({
         </p>
 
         {error.message && (
-          <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-left text-xs break-words text-red-600">
+          <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-left text-xs wrap-break-word text-red-600">
             {error.message}
           </p>
         )}

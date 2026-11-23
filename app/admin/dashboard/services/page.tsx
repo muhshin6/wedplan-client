@@ -8,6 +8,7 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Columns3,
+  GripVertical,
   List,
   Loader2,
   MapPin,
@@ -48,6 +49,7 @@ type StatusFilter = "all" | "pending" | "approved" | "rejected"
 type ViewMode = "list" | "kanban"
 
 const STATUSES = ["pending", "approved", "rejected"] as const
+type ServiceStatus = (typeof STATUSES)[number]
 
 const VIEWS: { id: ViewMode; label: string; icon: typeof List }[] = [
   { id: "list", label: "List", icon: List },
@@ -68,6 +70,10 @@ export default function AdminServicesPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
   const [viewMode, setViewMode] = useState<ViewMode>("kanban")
   const [deleteTarget, setDeleteTarget] = useState<Service | null>(null)
+  const [draggedId, setDraggedId] = useState<string | null>(null)
+  const [dragOverStatus, setDragOverStatus] = useState<ServiceStatus | null>(
+    null
+  )
   const { data: session } = authClient.useSession()
   const isAdmin =
     (session?.user as { role?: string } | undefined)?.role === "admin"
@@ -79,6 +85,7 @@ export default function AdminServicesPage() {
       try {
         const response = await fetch(`${API_URL}/api/services/admin/all`, {
           credentials: "include",
+          cache: "no-store",
         })
 
         const result = await response.json()
@@ -106,10 +113,7 @@ export default function AdminServicesPage() {
     }
   }, [])
 
-  const handleStatusUpdate = async (
-    id: string,
-    status: "approved" | "rejected"
-  ) => {
+  const handleStatusUpdate = async (id: string, status: ServiceStatus) => {
     if (!isAdmin) {
       toast.error("Only administrators can review services.")
       return
@@ -143,7 +147,9 @@ export default function AdminServicesPage() {
       toast.success(
         status === "approved"
           ? "Service approved successfully!"
-          : "Service rejected successfully!"
+          : status === "rejected"
+            ? "Service rejected successfully!"
+            : "Service moved back to pending."
       )
     } catch (error) {
       toast.error(
@@ -365,99 +371,169 @@ export default function AdminServicesPage() {
     )
   }
 
+  function handleDrop(targetStatus: ServiceStatus, transferId?: string) {
+    setDragOverStatus(null)
+    const id = transferId || draggedId
+    setDraggedId(null)
+
+    if (!id) return
+
+    if (!isAdmin) {
+      toast.error("Only administrators can review services.")
+      return
+    }
+
+    const service = services.find((item) => item._id === id)
+    if (!service || service.status === targetStatus) return
+
+    void handleStatusUpdate(id, targetStatus)
+  }
+
   function renderKanban() {
     return (
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {STATUSES.map((status) => {
-          const columnServices = filteredServices.filter(
-            (service) => service.status === status
-          )
+      <div className="space-y-3">
+        {isAdmin && (
+          <p className="inline-flex items-center gap-2 text-xs text-[#427D9D] dark:text-[#9BBEC8]">
+            <GripVertical size={14} />
+            Drag cards between columns to change their status.
+          </p>
+        )}
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {STATUSES.map((status) => {
+            const columnServices = filteredServices.filter(
+              (service) => service.status === status
+            )
 
-          return (
-            <div
-              key={status}
-              className="rounded-2xl border border-[#9BBEC8]/40 bg-[#F4F8FB]/70 p-4 dark:bg-[#0B1922]"
-            >
-              {/* Column header */}
-              <div className="mb-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`h-2.5 w-2.5 rounded-full ${status === "approved" ? "bg-emerald-500" : status === "rejected" ? "bg-red-500" : "bg-amber-500"}`}
-                  />
-                  <h3 className="text-sm font-bold text-[#164863] capitalize dark:text-[#DDF2FD]">
-                    {status}
-                  </h3>
+            return (
+              <div
+                key={status}
+                onDragOver={(event) => {
+                  if (!isAdmin) return
+                  event.preventDefault()
+                  event.dataTransfer.dropEffect = "move"
+                  setDragOverStatus(status)
+                }}
+                onDragLeave={(event) => {
+                  if (
+                    !event.currentTarget.contains(event.relatedTarget as Node)
+                  ) {
+                    setDragOverStatus((current) =>
+                      current === status ? null : current
+                    )
+                  }
+                }}
+                onDrop={(event) => {
+                  event.preventDefault()
+                  handleDrop(
+                    status,
+                    event.dataTransfer.getData("text/plain") || undefined
+                  )
+                }}
+                className={`rounded-2xl border p-4 transition-colors dark:bg-[#0B1922] ${
+                  dragOverStatus === status
+                    ? "border-[#427D9D] bg-[#DDF2FD]/70 ring-2 ring-[#427D9D]/20 dark:bg-[#122B3A]"
+                    : "border-[#9BBEC8]/40 bg-[#F4F8FB]/70"
+                }`}
+              >
+                {/* Column header */}
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`h-2.5 w-2.5 rounded-full ${status === "approved" ? "bg-emerald-500" : status === "rejected" ? "bg-red-500" : "bg-amber-500"}`}
+                    />
+                    <h3 className="text-sm font-bold text-[#164863] capitalize dark:text-[#DDF2FD]">
+                      {status}
+                    </h3>
+                  </div>
+                  <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-[#427D9D] dark:bg-[#122B3A]">
+                    {columnServices.length}
+                  </span>
                 </div>
-                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-[#427D9D] dark:bg-[#122B3A]">
-                  {columnServices.length}
-                </span>
-              </div>
 
-              {/* Cards */}
-              <div className="space-y-3">
-                {columnServices.length === 0 ? (
-                  <p className="rounded-xl border border-dashed border-[#9BBEC8]/50 px-4 py-8 text-center text-xs text-[#427D9D]">
-                    No {status} services
-                  </p>
-                ) : (
-                  columnServices.map((service, index) => (
-                    <motion.div
-                      key={service._id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: Math.min(index * 0.04, 0.25) }}
-                      whileHover={{ y: -3 }}
-                      className="group rounded-xl border border-[#9BBEC8]/40 bg-white p-4 shadow-sm transition-shadow hover:shadow-lg dark:bg-[#122B3A]"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[#DDF2FD] dark:bg-[#0B1922]">
-                          {service.images?.[0] ? (
-                            <div
-                              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                              style={{
-                                backgroundImage: `url("${service.images[0]}")`,
-                              }}
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-[#427D9D]">
-                              <BriefcaseBusiness size={18} />
+                {/* Cards */}
+                <div className="space-y-3">
+                  {columnServices.length === 0 ? (
+                    <p className="rounded-xl border border-dashed border-[#9BBEC8]/50 px-4 py-8 text-center text-xs text-[#427D9D]">
+                      No {status} services
+                    </p>
+                  ) : (
+                    columnServices.map((service, index) => (
+                      <div
+                        key={service._id}
+                        draggable={isAdmin}
+                        onDragStart={(event) => {
+                          setDraggedId(service._id)
+                          event.dataTransfer.effectAllowed = "move"
+                          event.dataTransfer.setData("text/plain", service._id)
+                        }}
+                        onDragEnd={() => {
+                          setDraggedId(null)
+                          setDragOverStatus(null)
+                        }}
+                        className={
+                          isAdmin ? "cursor-grab active:cursor-grabbing" : ""
+                        }
+                      >
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: Math.min(index * 0.04, 0.25) }}
+                          whileHover={{ y: -3 }}
+                          className={`group rounded-xl border border-[#9BBEC8]/40 bg-white p-4 shadow-sm transition-shadow hover:shadow-lg dark:bg-[#122B3A] ${
+                            draggedId === service._id ? "opacity-40" : ""
+                          }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[#DDF2FD] dark:bg-[#0B1922]">
+                              {service.images?.[0] ? (
+                                <div
+                                  className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                                  style={{
+                                    backgroundImage: `url("${service.images[0]}")`,
+                                  }}
+                                />
+                              ) : (
+                                <div className="flex h-full items-center justify-center text-[#427D9D]">
+                                  <BriefcaseBusiness size={18} />
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
-                            {service.name}
-                          </p>
-                          <p className="mt-0.5 text-xs text-[#427D9D]">
-                            {service.category}
-                          </p>
-                          <p className="mt-1 truncate text-xs text-gray-500 dark:text-[#9BBEC8]">
-                            {service.vendor?.name ||
-                              service.vendor?.businessName ||
-                              "WedPlan Vendor"}
-                          </p>
-                        </div>
-                      </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
+                                {service.name}
+                              </p>
+                              <p className="mt-0.5 text-xs text-[#427D9D]">
+                                {service.category}
+                              </p>
+                              <p className="mt-1 truncate text-xs text-gray-500 dark:text-[#9BBEC8]">
+                                {service.vendor?.name ||
+                                  service.vendor?.businessName ||
+                                  "WedPlan Vendor"}
+                              </p>
+                            </div>
+                          </div>
 
-                      <div className="mt-3 flex items-center justify-between text-xs text-gray-500 dark:text-[#9BBEC8]">
-                        <span className="inline-flex items-center gap-1">
-                          <MapPin size={12} /> {service.location || "—"}
-                        </span>
-                        <span className="font-semibold text-[#164863] dark:text-[#DDF2FD]">
-                          ৳{Number(service.price).toLocaleString("en-BD")}
-                        </span>
-                      </div>
+                          <div className="mt-3 flex items-center justify-between text-xs text-gray-500 dark:text-[#9BBEC8]">
+                            <span className="inline-flex items-center gap-1">
+                              <MapPin size={12} /> {service.location || "—"}
+                            </span>
+                            <span className="font-semibold text-[#164863] dark:text-[#DDF2FD]">
+                              ৳{Number(service.price).toLocaleString("en-BD")}
+                            </span>
+                          </div>
 
-                      <div className="mt-3 border-t border-[#9BBEC8]/30 pt-3">
-                        {renderActions(service)}
+                          <div className="mt-3 border-t border-[#9BBEC8]/30 pt-3">
+                            {renderActions(service)}
+                          </div>
+                        </motion.div>
                       </div>
-                    </motion.div>
-                  ))
-                )}
+                    ))
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     )
   }

@@ -123,8 +123,8 @@ export default function SignInPage() {
             className="relative z-10"
           >
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white backdrop-blur-md dark:bg-[#122B3A]/15">
-                <Heart className="h-6 w-6 fill-[#DDF2FD] text-[#DDF2FD]" />
+              <div className="bg-[#e6f7fc] flex h-12 w-12 items-center justify-center rounded-2xl backdrop-blur-md dark:bg-[#122B3A]/15">
+                <Heart className="h-6 w-6 fill-[#164863] text-[#164863] dark:fill-[#DDF2FD] dark:text-[#DDF2FD]" />
               </div>
 
               <span className="text-3xl font-extrabold tracking-tight text-white">
@@ -152,10 +152,10 @@ export default function SignInPage() {
 
             {/* Decorative Card */}
 
-            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white p-5 backdrop-blur-xl dark:bg-[#122B3A]/10">
+            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl dark:bg-[#122B3A]/10">
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9BBEC8]/20">
-                  <ShieldCheck className="h-6 w-6 text-[#DDF2FD]" />
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e5f9ff] dark:bg-[#9BBEC8]/20">
+                  <ShieldCheck className="h-6 w-6 text-[#164863] dark:text-[#DDF2FD]" />
                 </div>
 
                 <div>

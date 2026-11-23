@@ -262,7 +262,10 @@ export default function Navbar() {
         {/* Mobile Menu */}
         <div className="md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger className="rounded-xl border border-[#9BBEC8] p-2 text-[#164863] hover:bg-[#9BBEC8]/30">
+            <SheetTrigger
+              aria-label="Open navigation menu"
+              className="rounded-xl border border-[#9BBEC8] p-2 text-[#164863] hover:bg-[#9BBEC8]/30"
+            >
               <Menu className="h-5 w-5" />
             </SheetTrigger>
 

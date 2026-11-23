@@ -105,7 +105,7 @@ export default function SignUpPage() {
     try {
       const result = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/dashboard",
+        callbackURL: `${window.location.origin}/dashboard`,
       })
 
       if (result.error) {

@@ -14,7 +14,7 @@ import {
   XCircle,
 } from "lucide-react"
 import Link from "next/link"
-import AuthRedirect from "@/components/auth/auth-redirect"
+import RoleGuard from "@/components/auth/role-guard"
 
 interface Booking {
   _id: string
@@ -181,8 +181,8 @@ function CustomerDashboardContent() {
           return
         }
 
-        console.error("Customer bookings error:", error)
-
+        // A 401/403 is expected when the session changes or the role is wrong;
+        // don't log it as an uncaught application error.
         setError(
           error instanceof Error
             ? error.message
@@ -477,8 +477,8 @@ function CustomerDashboardContent() {
 
 export default function CustomerDashboardPage() {
   return (
-    <AuthRedirect>
+    <RoleGuard allowedRole="customer">
       <CustomerDashboardContent />
-    </AuthRedirect>
+    </RoleGuard>
   )
 }

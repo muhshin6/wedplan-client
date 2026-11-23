@@ -14,7 +14,7 @@ import {
 import Link from "next/link"
 import { toast } from "sonner"
 import { API_URL } from "@/lib/api"
-import AuthRedirect from "@/components/auth/auth-redirect"
+import RoleGuard from "@/components/auth/role-guard"
 
 interface Booking {
   _id: string
@@ -108,8 +108,7 @@ function CustomerBookingsContent() {
           return
         }
 
-        console.error("Bookings fetch error:", error)
-
+        // 401/403 can occur if the session/role changes — show inline, don't log.
         setError(
           error instanceof Error ? error.message : "Something went wrong."
         )
@@ -441,8 +440,8 @@ function CustomerBookingsContent() {
 
 export default function CustomerBookingsPage() {
   return (
-    <AuthRedirect>
+    <RoleGuard allowedRole="customer">
       <CustomerBookingsContent />
-    </AuthRedirect>
+    </RoleGuard>
   )
 }

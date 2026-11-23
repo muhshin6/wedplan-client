@@ -14,7 +14,6 @@ import {
   RefreshCw,
   Tag,
   Heart,
-  Sparkles,
   ShieldCheck,
   CalendarHeart,
   CheckCircle2,

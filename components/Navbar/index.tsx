@@ -136,7 +136,7 @@ export default function Navbar() {
         <motion.div whileHover={{ scale: 1.04 }}>
           <Link href="/" className="flex items-center gap-2.5">
             <Image
-              src="/images/Wedplan-logo.png"
+              src="/images/Wedplan-Logo.png"
               alt="WedPlan"
               width={46}
               height={46}

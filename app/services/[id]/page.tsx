@@ -316,7 +316,6 @@ function ServiceDetailsContent() {
             {/* Category Badge */}
             <div className="absolute top-5 left-5 sm:top-8 sm:left-8">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white px-4 py-2 text-xs font-bold text-[#164863] shadow-lg backdrop-blur dark:bg-[#122B3A]/90 dark:text-[#DDF2FD]">
-                <Sparkles className="h-4 w-4" />
                 {service.category}
               </span>
             </div>
@@ -388,7 +387,7 @@ function ServiceDetailsContent() {
             <div className="rounded-3xl border border-[#DDF2FD] bg-white p-6 shadow-sm sm:p-9 dark:bg-[#122B3A]">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#DDF2FD]">
-                  <Heart className="h-6 w-6 text-[#164863] dark:text-[#DDF2FD]" />
+                  <Heart className="h-6 w-6 text-[#164863] dark:text-[#164863]" />
                 </div>
 
                 <div>
@@ -402,7 +401,7 @@ function ServiceDetailsContent() {
                 </div>
               </div>
 
-              <p className="mt-7 text-sm leading-8 text-slate-600 sm:text-base">
+              <p className="mt-7 text-sm leading-8 text-slate-600 sm:text-base dark:text-slate-400">
                 {service.description}
               </p>
             </div>
@@ -420,7 +419,7 @@ function ServiceDetailsContent() {
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <ShieldCheck className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
+                    <ShieldCheck className="h-5 w-5 text-[#164863] dark:text-[#164863]" />
                   </div>
 
                   <div>
@@ -428,7 +427,7 @@ function ServiceDetailsContent() {
                       Verified Service
                     </h3>
 
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
                       This service has been approved by WedPlan.
                     </p>
                   </div>
@@ -436,7 +435,7 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <CalendarHeart className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
+                    <CalendarHeart className="h-5 w-5 text-[#164863] dark:text-[#164863]" />
                   </div>
 
                   <div>
@@ -444,7 +443,7 @@ function ServiceDetailsContent() {
                       Wedding Planning
                     </h3>
 
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
                       Find the right service for your special day.
                     </p>
                   </div>
@@ -452,7 +451,7 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <MapPin className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
+                    <MapPin className="h-5 w-5 text-[#164863] dark:text-[#164863]" />
                   </div>
 
                   <div>
@@ -460,7 +459,7 @@ function ServiceDetailsContent() {
                       Service Location
                     </h3>
 
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
                       {service.location}
                     </p>
                   </div>
@@ -468,7 +467,7 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <CheckCircle2 className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
+                    <CheckCircle2 className="h-5 w-5 text-[#164863] dark:text-[#164863]" />
                   </div>
 
                   <div>
@@ -476,7 +475,7 @@ function ServiceDetailsContent() {
                       Quality Focused
                     </h3>
 
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-400">
                       Explore service details before making a request.
                     </p>
                   </div>
@@ -505,7 +504,6 @@ function ServiceDetailsContent() {
               {/* Price Header */}
               <div className="bg-linear-to-br from-[#164863] to-[#427D9D] p-7 text-white">
                 <div className="flex items-center gap-2 text-sm font-medium text-white/75">
-                  <Sparkles className="h-4 w-4" />
                   SERVICE PRICING
                 </div>
 
@@ -530,28 +528,28 @@ function ServiceDetailsContent() {
                   Interested in this service?
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
                   Explore your options and plan your wedding with the right
                   service provider.
                 </p>
 
                 <div className="my-6 space-y-4">
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                     <CheckCircle2 className="h-5 w-5 text-[#427D9D]" />
                     Admin-approved service
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                     <MapPin className="h-5 w-5 text-[#427D9D]" />
                     {service.location}
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                     <Clock className="h-5 w-5 text-[#427D9D]" />
                     Discuss your event requirements
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                  <div className="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                     <UserRound className="h-5 w-5 shrink-0 text-[#427D9D]" />
                     <span className="truncate">
                       {service.vendor?.name ||
@@ -567,7 +565,7 @@ function ServiceDetailsContent() {
                     Make Your Day Special
                   </div>
 
-                  <p className="mt-2 text-xs leading-5 text-slate-500">
+                  <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-400">
                     Find everything you need to make your wedding celebration
                     memorable.
                   </p>

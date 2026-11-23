@@ -292,9 +292,11 @@ export default function SubscriptionPage() {
       <div>
         <div className="mb-2 flex items-center gap-2">
           <CreditCard className="h-5 w-5 text-[#427D9D]" />
-          <h1 className="text-3xl font-bold text-[#164863]">Subscription</h1>
+          <h1 className="text-3xl font-bold text-[#164863] dark:text-[#daf2ff]">
+            Subscription
+          </h1>
         </div>
-        <p className="text-[#164863]/70">
+        <p className="dark:text-slate-400">
           Choose a plan that fits your wedding business and manage your billing.
         </p>
       </div>
@@ -319,7 +321,7 @@ export default function SubscriptionPage() {
         <CardHeader className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <CardTitle className="text-lg font-bold">Current Plan</CardTitle>
-            <CardDescription className="text-sm text-[#164863]/70">
+            <CardDescription className="text-sm dark:text-slate-400">
               Your active subscription
             </CardDescription>
           </div>
@@ -329,7 +331,7 @@ export default function SubscriptionPage() {
         </CardHeader>
         <CardContent className="pt-2">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-xl border border-[#9BBEC8]/30 bg-white/70 p-4">
+            <div className="rounded-xl border border-[#9BBEC8]/30 bg-white/70 p-4 dark:bg-[#d3ecff]">
               <p className="text-xs tracking-wider text-[#427D9D] uppercase">
                 Active service limit
               </p>
@@ -345,7 +347,7 @@ export default function SubscriptionPage() {
                       : "3 services"}
               </p>
             </div>
-            <div className="rounded-xl border border-[#9BBEC8]/30 bg-white/70 p-4">
+            <div className="rounded-xl border border-[#9BBEC8]/30 bg-white/70 p-4 dark:bg-[#d3ecff]">
               <p className="text-xs tracking-wider text-[#427D9D] uppercase">
                 Premium Vendor Badge
               </p>
@@ -389,7 +391,9 @@ export default function SubscriptionPage() {
 
       {/* Choose a plan */}
       <div>
-        <h2 className="mb-6 text-xl font-bold text-[#164863]">Choose a Plan</h2>
+        <h2 className="mb-6 text-xl font-bold text-[#164863] dark:text-[#c5e7fa]">
+          Choose a Plan
+        </h2>
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {plans.map((plan) => {
             const isCurrent = plan.id === currentPlan
@@ -434,10 +438,12 @@ export default function SubscriptionPage() {
 
                   <CardContent className="flex-1 pt-0">
                     <div className="mb-6 flex items-baseline gap-2">
-                      <span className="text-3xl font-extrabold text-[#164863]">
+                      <span className="text-3xl font-extrabold text-[#164863] dark:text-[#d2eaf7]">
                         {plan.price}
                       </span>
-                      <span className="text-sm text-[#427D9D]">/month</span>
+                      <span className="text-sm text-[#427D9D] dark:text-slate-400">
+                        /month
+                      </span>
                     </div>
 
                     <ul
@@ -450,7 +456,7 @@ export default function SubscriptionPage() {
                       {plan.features.map((feature) => (
                         <li
                           key={feature}
-                          className="flex items-start gap-2 text-sm text-[#164863]/80"
+                          className="flex items-start gap-2 text-sm text-[#164863]/80 dark:text-slate-400"
                         >
                           <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#427D9D]" />
                           {feature}
@@ -467,7 +473,7 @@ export default function SubscriptionPage() {
                         isPremium ? "sm:max-w-xs xl:max-w-none" : ""
                       } ${
                         isCurrent
-                          ? "cursor-not-allowed bg-[#9BBEC8]/30 text-[#164863]"
+                          ? "cursor-not-allowed bg-[#9BBEC8]/30 text-[#164863] dark:text-slate-200"
                           : "bg-[#164863] text-[#DDF2FD] hover:bg-[#427D9D]"
                       }`}
                     >

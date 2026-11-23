@@ -260,8 +260,7 @@ export default function ServicesPage() {
           <div className="pointer-events-none absolute right-1/4 -bottom-40 h-80 w-80 rounded-full bg-[#9BBEC8]/10 blur-3xl" />
 
           <div className="relative z-10 max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white px-4 py-2 text-xs font-semibold tracking-wide text-[#DDF2FD] backdrop-blur dark:bg-[#122B3A]/10">
-              <Sparkles className="h-4 w-4" />
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-[#F4F8FB] px-4 py-2 text-xs font-semibold tracking-wide text-[#164863] backdrop-blur dark:bg-[#122B3A]/10 dark:text-[#B9DFEF]">
               MAKE YOUR DREAM WEDDING A REALITY
             </span>
 
@@ -271,12 +270,10 @@ export default function ServicesPage() {
               For Your
               <span className="text-[#B9DFEF]"> Perfect Day.</span>
             </h1>
-
             <p className="mt-6 max-w-xl text-sm leading-7 text-white/75 sm:text-base">
               Discover exceptional wedding vendors, explore beautiful services,
               and find everything you need to create unforgettable memories.
             </p>
-
             <div className="mt-9 flex flex-wrap items-center gap-5 text-sm text-white/80">
               <div className="flex items-center gap-2">
                 <CalendarHeart className="h-5 w-5 text-[#DDF2FD]" />
@@ -362,7 +359,7 @@ export default function ServicesPage() {
           {/* Categories */}
           <div className="mt-6">
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-xs font-bold tracking-wider text-slate-500">
+              <p className="text-xs font-bold tracking-wider text-slate-400">
                 BROWSE BY CATEGORY
               </p>
 
@@ -388,7 +385,7 @@ export default function ServicesPage() {
                   className={`shrink-0 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
                     activeCategory === category
                       ? "bg-[#164863] text-white shadow-lg shadow-[#164863]/15"
-                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
+                      : "border border-[#DDF2FD] bg-white text-slate-400 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
                   }`}
                 >
                   {category}
@@ -399,7 +396,7 @@ export default function ServicesPage() {
 
           {/* Location filter */}
           <div className="mt-6">
-            <p className="mb-3 text-xs font-bold tracking-wider text-slate-500">
+            <p className="mb-3 text-xs font-bold tracking-wider text-slate-400">
               BROWSE BY LOCATION
             </p>
 
@@ -412,7 +409,7 @@ export default function ServicesPage() {
                   className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
                     activeLocation === location
                       ? "bg-[#427D9D] text-white shadow-lg shadow-[#427D9D]/15"
-                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
+                      : "border border-[#DDF2FD] bg-white text-slate-400 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
                   }`}
                 >
                   <MapPin className="h-4 w-4" />

@@ -239,11 +239,11 @@ function ProfileForm({ user }: { user: ProfileUser }) {
       <div>
         <div className="mb-2 flex items-center gap-2">
           <UserRound className="h-5 w-5 text-[#427D9D]" />
-          <h1 className="text-3xl font-bold text-[#164863]">
+          <h1 className="text-3xl font-bold text-[#164863] dark:text-[#cfecfc]">
             Profile Settings
           </h1>
         </div>
-        <p className="text-[#164863]/70">
+        <p className="text-[#164863]/70 dark:text-slate-400">
           Manage your account information, password and security.
         </p>
       </div>
@@ -355,14 +355,16 @@ function ProfileForm({ user }: { user: ProfileUser }) {
           <CardTitle className="text-lg font-bold text-[#164863]">
             Personal Information
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="dark:text-[#31789e]">
             Update the details shown on your WedPlan account.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleProfileSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="profile-name">Full Name</Label>
+              <Label htmlFor="profile-name" className="dark:text-[#164863]">
+                Full Name
+              </Label>
               <Input
                 id="profile-name"
                 value={name}
@@ -374,7 +376,9 @@ function ProfileForm({ user }: { user: ProfileUser }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="profile-email">Email Address</Label>
+              <Label htmlFor="profile-email" className="dark:text-[#164863]">
+                Email Address
+              </Label>
               <div className="relative">
                 <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9BBEC8]" />
                 <Input
@@ -391,7 +395,12 @@ function ProfileForm({ user }: { user: ProfileUser }) {
 
             {isVendor && (
               <div className="space-y-2">
-                <Label htmlFor="profile-business">Business Name</Label>
+                <Label
+                  htmlFor="profile-business"
+                  className="dark:text-[#164863]"
+                >
+                  Business Name
+                </Label>
                 <Input
                   id="profile-business"
                   value={businessName}
@@ -424,14 +433,16 @@ function ProfileForm({ user }: { user: ProfileUser }) {
             <KeyRound className="h-5 w-5 text-[#427D9D]" />
             Change Password
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="dark:text-[#164863]">
             Use at least 8 characters for your new password.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="current-password">Current Password</Label>
+              <Label htmlFor="current-password" className="dark:text-[#164863]">
+                Current Password
+              </Label>
               <div className="relative">
                 <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9BBEC8]" />
                 <Input
@@ -460,7 +471,9 @@ function ProfileForm({ user }: { user: ProfileUser }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password" className="dark:text-[#164863]">
+                New Password
+              </Label>
               <div className="relative">
                 <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9BBEC8]" />
                 <Input
@@ -489,7 +502,9 @@ function ProfileForm({ user }: { user: ProfileUser }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Label htmlFor="confirm-password" className="dark:text-[#164863]">
+                Confirm New Password
+              </Label>
               <div className="relative">
                 <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-[#9BBEC8]" />
                 <Input

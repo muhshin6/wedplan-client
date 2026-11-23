@@ -23,6 +23,32 @@ export async function getAuthHeaders(): Promise<Record<string, string>> {
   }
 }
 
+// Extract a human-readable message from any failed API response.
+// Falls back to status-based defaults so users never see a blank error.
+export async function readApiError(
+  response: Response,
+  fallback = "Something went wrong. Please try again."
+): Promise<string> {
+  try {
+    const result = await response.json()
+
+    if (typeof result?.message === "string" && result.message.trim()) {
+      return result.message
+    }
+  } catch {
+    // non-JSON response
+  }
+
+  if (response.status === 401) return "Please sign in to continue."
+  if (response.status === 403)
+    return "You do not have permission for this action."
+  if (response.status === 404) return "The requested record was not found."
+  if (response.status >= 500)
+    return "The server is unavailable. Please try again later."
+
+  return fallback
+}
+
 export async function apiFetch(
   path: string,
   options: RequestInit = {}

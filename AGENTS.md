@@ -17,7 +17,7 @@ Next.js 16.4.6 (App Router) + React 19 + Tailwind v4 + shadcn/ui. npm only (`pac
 - `npm run dev` / `npm run build`
 - Verify changes with `npm run lint` then `npm run typecheck` — **there is no test runner** in this repo (no test script, no test framework, no CI).
 - `npm run format` — Prettier over `**/*.{ts,tsx}` only (not CSS/JSON/MD). Style: **no semicolons**, double quotes, LF; Tailwind class order comes from `prettier-plugin-tailwindcss`. Run it on files you touch; don't hand-sort classes.
-- Lint baseline is **not green**: 3 pre-existing errors (unescaped `'` in `app/(auth)/sign-in/page.tsx`; `react-hooks/set-state-in-effect` in shadcn-generated `components/ui/carousel.tsx` and `hooks/use-mobile.ts`). Don't add new errors, and don't mass-fix unrelated ones.
+- Lint baseline is **not green**: 1 pre-existing error (unescaped `'` in `app/(auth)/sign-in/page.tsx`) + 1 warning (`<img>` in `app/vendor/dashboard/add-service/page.tsx`). Don't add new errors, and don't mass-fix unrelated ones.
 
 ## Architecture
 

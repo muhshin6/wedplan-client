@@ -42,6 +42,8 @@ npm run dev       # http://localhost:3000
 
 The backend (`wedplan-server`) must be running at `http://localhost:5000` for auth and data features to work. Without it, pages fail silently.
 
+> **Local vs production:** if `.env` points `NEXT_PUBLIC_API_URL` at the deployed backend, local sign-in will fail — cookies are issued for the deployed domain. Create a gitignored `.env.local` with `NEXT_PUBLIC_API_URL=http://localhost:5000` for local development; Next.js gives `.env.local` priority over `.env`.
+
 ## Production deployment
 
 Set in your hosting provider's (e.g. Vercel) environment variables:

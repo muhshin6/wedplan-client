@@ -56,7 +56,7 @@ const cardVariants = {
 
 export default function WhyChooseWedPlan() {
   return (
-    <section className="relative overflow-hidden bg-[#DDF2FD]/50 px-6 py-24 md:px-10 lg:px-16">
+    <section className="relative overflow-hidden bg-[#DDF2FD] px-6 py-24 md:px-10 lg:px-16 dark:bg-[#0B1922] dark:bg-[#122B3A]/50">
       {/* Background Decoration */}
       <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[#427D9D]/10 blur-[100px]" />
 
@@ -74,12 +74,12 @@ export default function WhyChooseWedPlan() {
             Why WedPlan
           </span>
 
-          <h2 className="max-w-3xl text-3xl leading-tight font-bold tracking-tight text-[#164863] sm:text-4xl md:text-5xl">
+          <h2 className="max-w-3xl text-3xl leading-tight font-bold tracking-tight text-[#164863] sm:text-4xl md:text-5xl dark:text-[#DDF2FD]">
             Why Choose
             <span className="mt-2 block text-[#427D9D]">WedPlan?</span>
           </h2>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#164863]/70 md:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#164863] md:text-lg dark:text-[#9BBEC8] dark:text-[#DDF2FD]/70">
             Planning a wedding should feel exciting, not overwhelming. WedPlan
             brings everything you need together so you can focus on what matters
             most.
@@ -105,7 +105,7 @@ export default function WhyChooseWedPlan() {
                   y: -8,
                   transition: { duration: 0.25 },
                 }}
-                className="group relative flex flex-col rounded-2xl border border-[#9BBEC8]/40 bg-white/80 p-7 shadow-[0_8px_30px_rgba(22,72,99,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-[#427D9D]/50 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,72,99,0.12)]"
+                className="group relative flex flex-col rounded-2xl border border-[#9BBEC8]/40 bg-white/80 p-7 shadow-[0_8px_30px_rgba(22,72,99,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-[#427D9D]/50 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,72,99,0.12)] dark:bg-[#122B3A]/80"
               >
                 {/* Icon */}
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#164863] text-[#DDF2FD] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#427D9D]">
@@ -113,11 +113,11 @@ export default function WhyChooseWedPlan() {
                 </div>
 
                 {/* Content */}
-                <h3 className="mt-6 text-lg font-bold tracking-tight text-[#164863] transition-colors group-hover:text-[#427D9D]">
+                <h3 className="mt-6 text-lg font-bold tracking-tight text-[#164863] transition-colors group-hover:text-[#427D9D] dark:text-[#DDF2FD]">
                   {benefit.title}
                 </h3>
 
-                <p className="mt-3 text-sm leading-6 text-[#164863]/65">
+                <p className="mt-3 text-sm leading-6 text-[#164863] dark:text-[#9BBEC8] dark:text-[#DDF2FD]/65">
                   {benefit.description}
                 </p>
               </motion.div>

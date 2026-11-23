@@ -52,7 +52,7 @@ export default function HeroSection() {
           <div className="mt-10">
             <Link
               href="/services"
-              className="group inline-flex items-center gap-3 rounded-full bg-[#DDF2FD] px-7 py-4 text-sm font-semibold text-[#164863] transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-[#164863]/30"
+              className="group inline-flex items-center gap-3 rounded-full bg-[#DDF2FD] px-7 py-4 text-sm font-semibold text-[#164863] transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-[#164863]/30 dark:bg-[#122B3A] dark:text-[#DDF2FD]"
             >
               Explore Wedding Services
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -64,7 +64,7 @@ export default function HeroSection() {
             <div className="flex -space-x-2">
               <div className="h-8 w-8 rounded-full border-2 border-[#164863] bg-[#9BBEC8]" />
               <div className="h-8 w-8 rounded-full border-2 border-[#164863] bg-[#427D9D]" />
-              <div className="h-8 w-8 rounded-full border-2 border-[#164863] bg-[#DDF2FD]" />
+              <div className="h-8 w-8 rounded-full border-2 border-[#164863] bg-[#DDF2FD] dark:bg-[#122B3A]" />
             </div>
 
             <span>Discover your perfect wedding vendors</span>

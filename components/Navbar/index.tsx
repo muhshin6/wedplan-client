@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sheet"
 
 import { authClient } from "@/lib/auth-client"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -105,7 +106,7 @@ export default function Navbar() {
         <Link href="/sign-in" onClick={() => setOpen(false)}>
           <Button
             variant="ghost"
-            className="w-full rounded-full px-5 font-semibold text-[#164863] hover:bg-[#9BBEC8]/30"
+            className="w-full rounded-full px-5 font-semibold text-[#164863] hover:bg-[#9BBEC8]/30 dark:text-[#DDF2FD]"
           >
             Sign In
           </Button>
@@ -127,13 +128,13 @@ export default function Navbar() {
       transition={{ duration: 0.7, ease: "easeOut" }}
       className="sticky top-0 z-50 w-full px-4 pt-4"
     >
-      <nav className="mx-auto flex h-[76px] max-w-7xl items-center justify-between rounded-2xl border border-[#9BBEC8]/40 bg-[#DDF2FD]/90 px-5 shadow-lg shadow-[#164863]/5 backdrop-blur-xl md:px-8">
+      <nav className="mx-auto flex h-[76px] max-w-7xl items-center justify-between rounded-2xl border border-[#9BBEC8]/40 bg-[#DDF2FD]/90 px-5 shadow-lg shadow-[#164863]/5 backdrop-blur-xl md:px-8 dark:bg-[#122B3A]/90">
         {/* Logo */}
         <motion.div whileHover={{ scale: 1.04 }}>
           <Link href="/" className="flex items-center gap-2.5">
             <Image
-              src="/images/Wedplan-Logo.png"
-              alt="WedPlan Logo"
+              src="/images/Wedplan-logo.png"
+              alt="WedPlan"
               width={46}
               height={46}
               priority
@@ -144,14 +145,14 @@ export default function Navbar() {
               }}
             />
 
-            <span className="text-2xl font-extrabold tracking-tight text-[#164863]">
+            <span className="text-2xl font-extrabold tracking-tight text-[#164863] dark:text-[#DDF2FD]">
               WedPlan<span className="text-[#427D9D]">.</span>
             </span>
           </Link>
         </motion.div>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-1 rounded-full border border-[#9BBEC8]/40 bg-white/60 p-1.5 md:flex">
+        <div className="hidden items-center gap-1 rounded-full border border-[#9BBEC8]/40 bg-white/60 p-1.5 md:flex dark:bg-[#0B1922]/60">
           {navLinks.map((link) => {
             const isActive = pathname === link.href
 
@@ -175,7 +176,9 @@ export default function Navbar() {
 
                 <span
                   className={`relative z-10 ${
-                    isActive ? "text-[#DDF2FD]" : "text-[#164863]"
+                    isActive
+                      ? "text-[#DDF2FD]"
+                      : "text-[#164863] dark:text-[#DDF2FD]"
                   }`}
                 >
                   {link.name}
@@ -187,6 +190,7 @@ export default function Navbar() {
 
         {/* Desktop Authentication */}
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           {isPending ? (
             <div className="h-10 w-28 animate-pulse rounded-full bg-[#9BBEC8]/40" />
           ) : user ? (
@@ -194,7 +198,7 @@ export default function Navbar() {
               <Button
                 variant="outline"
                 onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 rounded-full border-[#9BBEC8] text-[#164863]"
+                className="flex items-center gap-2 rounded-full border-[#9BBEC8] text-[#164863] dark:text-[#DDF2FD]"
               >
                 <UserAvatar
                   name={user.name}
@@ -206,7 +210,7 @@ export default function Navbar() {
               </Button>
 
               {profileOpen && (
-                <div className="absolute top-14 right-0 z-50 w-60 rounded-2xl border border-[#9BBEC8]/50 bg-[#DDF2FD] p-2 shadow-xl">
+                <div className="absolute top-14 right-0 z-50 w-60 rounded-2xl border border-[#9BBEC8]/50 bg-[#DDF2FD] p-2 shadow-xl dark:bg-[#122B3A]">
                   <div className="flex items-center gap-3 border-b border-[#9BBEC8]/50 px-3 py-3">
                     <UserAvatar
                       name={user.name}
@@ -214,13 +218,13 @@ export default function Navbar() {
                       className="h-11 w-11 text-base"
                     />
                     <div className="min-w-0">
-                      <p className="truncate font-semibold text-[#164863]">
+                      <p className="truncate font-semibold text-[#164863] dark:text-[#DDF2FD]">
                         {user.name}
                       </p>
                       <p className="truncate text-xs text-[#427D9D]">
                         {user.email}
                       </p>
-                      <span className="mt-1 inline-block rounded-full bg-[#9BBEC8]/40 px-3 py-1 text-xs font-medium text-[#164863] capitalize">
+                      <span className="mt-1 inline-block rounded-full bg-[#9BBEC8]/40 px-3 py-1 text-xs font-medium text-[#164863] capitalize dark:text-[#DDF2FD]">
                         {user.role || "Customer"}
                       </span>
                     </div>
@@ -229,7 +233,7 @@ export default function Navbar() {
                   <Link
                     href={dashboardPath}
                     onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#164863] hover:bg-[#9BBEC8]/40"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#164863] hover:bg-[#9BBEC8]/40 dark:text-[#DDF2FD]"
                   >
                     <LayoutDashboard className="h-4 w-4" />
                     Dashboard
@@ -238,7 +242,7 @@ export default function Navbar() {
                   <Link
                     href="/profile-settings"
                     onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#164863] hover:bg-[#9BBEC8]/40"
+                    className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#164863] hover:bg-[#9BBEC8]/40 dark:text-[#DDF2FD]"
                   >
                     <Settings className="h-4 w-4" />
                     Profile Settings
@@ -264,17 +268,17 @@ export default function Navbar() {
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
               aria-label="Open navigation menu"
-              className="rounded-xl border border-[#9BBEC8] p-2 text-[#164863] hover:bg-[#9BBEC8]/30"
+              className="rounded-xl border border-[#9BBEC8] p-2 text-[#164863] hover:bg-[#9BBEC8]/30 dark:text-[#DDF2FD]"
             >
               <Menu className="h-5 w-5" />
             </SheetTrigger>
 
             <SheetContent
               side="right"
-              className="w-[300px] border-[#9BBEC8]/40 bg-[#DDF2FD] p-6"
+              className="w-[300px] border-[#9BBEC8]/40 bg-[#DDF2FD] p-6 dark:bg-[#122B3A]"
             >
               <SheetHeader>
-                <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#164863]">
+                <SheetTitle className="flex items-center gap-2 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
                   <Image
                     src="/images/Wedplan-Logo.png"
                     alt="WedPlan Logo"
@@ -299,7 +303,7 @@ export default function Navbar() {
                     className={`rounded-xl px-4 py-3 font-semibold ${
                       pathname === link.href
                         ? "bg-[#164863] text-[#DDF2FD]"
-                        : "text-[#164863] hover:bg-[#9BBEC8]/40"
+                        : "text-[#164863] hover:bg-[#9BBEC8]/40 dark:text-[#DDF2FD]"
                     }`}
                   >
                     {link.name}
@@ -307,19 +311,26 @@ export default function Navbar() {
                 ))}
               </div>
 
-              <div className="mt-8">
+              <div className="mt-8 flex items-center justify-between">
+                <span className="text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]">
+                  Theme
+                </span>
+                <ThemeToggle />
+              </div>
+
+              <div className="mt-6">
                 {isPending ? (
                   <div className="h-10 animate-pulse rounded-xl bg-[#9BBEC8]/40" />
                 ) : user ? (
                   <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-4">
+                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-4 dark:bg-[#0B1922]/60">
                       <UserAvatar
                         name={user.name}
                         image={user.image}
                         className="h-11 w-11 text-base"
                       />
                       <div className="min-w-0">
-                        <p className="font-semibold text-[#164863]">
+                        <p className="font-semibold text-[#164863] dark:text-[#DDF2FD]">
                           {user.name}
                         </p>
                         <p className="mt-1 truncate text-xs text-[#427D9D]">

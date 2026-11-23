@@ -92,7 +92,7 @@ export default function SignInPage() {
 
   return (
     <main className="min-h-screen bg-[#DDF2FD] p-4 md:p-6 lg:p-8">
-      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white dark:bg-[#122B3A] shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
         {/* LEFT SIDE - VISUAL */}
 
         <section className="relative hidden overflow-hidden bg-[#164863] p-12 lg:flex lg:flex-col lg:justify-between">
@@ -111,7 +111,7 @@ export default function SignInPage() {
             className="relative z-10"
           >
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#122B3A]/15 backdrop-blur-md">
                 <Heart className="h-6 w-6 fill-[#DDF2FD] text-[#DDF2FD]" />
               </div>
 
@@ -140,7 +140,7 @@ export default function SignInPage() {
 
             {/* Decorative Card */}
 
-            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl">
+            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white dark:bg-[#122B3A]/10 p-5 backdrop-blur-xl">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9BBEC8]/20">
                   <ShieldCheck className="h-6 w-6 text-[#DDF2FD]" />
@@ -185,7 +185,7 @@ export default function SignInPage() {
                 <Heart className="h-5 w-5 fill-white text-white" />
               </div>
 
-              <span className="text-2xl font-extrabold text-[#164863]">
+              <span className="text-2xl font-extrabold text-[#164863] dark:text-[#DDF2FD]">
                 WedPlan.
               </span>
             </Link>
@@ -193,11 +193,11 @@ export default function SignInPage() {
             {/* Heading */}
 
             <div className="mb-9">
-              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863]">
+              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863] dark:text-[#DDF2FD]">
                 Sign in to your account
               </h2>
 
-              <p className="mt-3 leading-7 text-gray-500">
+              <p className="mt-3 leading-7 text-gray-500 dark:text-[#9BBEC8]">
                 Welcome back! Please enter your details to continue your wedding
                 planning journey.
               </p>
@@ -211,7 +211,7 @@ export default function SignInPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Email Address
                 </label>
@@ -227,7 +227,7 @@ export default function SignInPage() {
                     placeholder="you@example.com"
                     autoComplete="email"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -238,7 +238,7 @@ export default function SignInPage() {
                 <div className="mb-2 flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="text-sm font-semibold text-[#164863]"
+                    className="text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                   >
                     Password
                   </label>
@@ -255,7 +255,7 @@ export default function SignInPage() {
                     placeholder="Enter your password"
                     autoComplete="current-password"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-12 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-12 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
 
                   <button
@@ -264,7 +264,7 @@ export default function SignInPage() {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863]"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -320,7 +320,7 @@ export default function SignInPage() {
                 variant="outline"
                 onClick={() => void handleGoogleSignIn()}
                 disabled={googleLoading || isLoading}
-                className="h-14 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] hover:bg-[#DDF2FD]/40"
+                className="h-14 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] dark:text-[#DDF2FD] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922]"
               >
                 {googleLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -354,11 +354,11 @@ export default function SignInPage() {
 
             {/* Sign Up Link */}
 
-            <p className="mt-8 text-center text-sm text-gray-500">
+            <p className="mt-8 text-center text-sm text-gray-500 dark:text-[#9BBEC8]">
               Don't have an account?{" "}
               <Link
                 href="/sign-up"
-                className="font-bold text-[#164863] transition-colors hover:text-[#427D9D]"
+                className="font-bold text-[#164863] dark:text-[#DDF2FD] transition-colors hover:text-[#427D9D]"
               >
                 Create an account
               </Link>
@@ -369,7 +369,7 @@ export default function SignInPage() {
             <div className="mt-12 border-t border-[#9BBEC8]/30 pt-6 text-center">
               <Link
                 href="/"
-                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863]"
+                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
               >
                 ← Back to Home
               </Link>

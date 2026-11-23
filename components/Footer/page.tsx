@@ -84,7 +84,7 @@ function SocialIcon({
       aria-label={name}
       whileHover={{ scale: 1.1, y: -3 }}
       whileTap={{ scale: 0.95 }}
-      className="flex h-11 w-11 items-center justify-center rounded-full border border-[#9BBEC8]/40 text-[#DDF2FD] transition-colors duration-300 hover:bg-[#9BBEC8] hover:text-[#164863]"
+      className="flex h-11 w-11 items-center justify-center rounded-full border border-[#9BBEC8]/40 text-[#DDF2FD] transition-colors duration-300 hover:bg-[#9BBEC8] hover:text-[#164863] dark:text-[#DDF2FD]"
     >
       <svg viewBox="0 0 24 24" fill="currentColor" className="h-4.5 w-4.5">
         <path d={d} />

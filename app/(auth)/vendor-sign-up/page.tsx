@@ -133,7 +133,7 @@ export default function VendorSignUpPage() {
 
   return (
     <main className="min-h-screen bg-[#DDF2FD] p-4 md:p-6 lg:p-8">
-      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white dark:bg-[#122B3A] shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
         {/* LEFT SIDE */}
 
         <section className="relative hidden overflow-hidden bg-[#164863] p-12 lg:flex lg:flex-col lg:justify-between">
@@ -150,7 +150,7 @@ export default function VendorSignUpPage() {
             className="relative z-10"
           >
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#122B3A]/15 backdrop-blur-md">
                 <Heart className="h-6 w-6 fill-[#DDF2FD] text-[#DDF2FD]" />
               </div>
 
@@ -168,7 +168,7 @@ export default function VendorSignUpPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative z-10"
           >
-            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl">
+            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/20 bg-white dark:bg-[#122B3A]/10 backdrop-blur-xl">
               <Store className="h-8 w-8 text-[#DDF2FD]" />
             </div>
 
@@ -183,7 +183,7 @@ export default function VendorSignUpPage() {
 
             {/* Feature Card */}
 
-            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl">
+            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white dark:bg-[#122B3A]/10 p-5 backdrop-blur-xl">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9BBEC8]/20">
                   <Sparkles className="h-6 w-6 text-[#DDF2FD]" />
@@ -228,7 +228,7 @@ export default function VendorSignUpPage() {
                 <Heart className="h-5 w-5 fill-white text-white" />
               </div>
 
-              <span className="text-2xl font-extrabold text-[#164863]">
+              <span className="text-2xl font-extrabold text-[#164863] dark:text-[#DDF2FD]">
                 WedPlan.
               </span>
             </Link>
@@ -236,11 +236,11 @@ export default function VendorSignUpPage() {
             {/* Heading */}
 
             <div className="mb-8">
-              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863]">
+              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863] dark:text-[#DDF2FD]">
                 Create your business account
               </h2>
 
-              <p className="mt-3 leading-7 text-gray-500">
+              <p className="mt-3 leading-7 text-gray-500 dark:text-[#9BBEC8]">
                 Join WedPlan as a vendor and start showcasing your wedding
                 services.
               </p>
@@ -251,7 +251,7 @@ export default function VendorSignUpPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Profile Image (optional) */}
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#164863]">
+                <label className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]">
                   Profile Image{" "}
                   <span className="font-normal text-gray-400">(Optional)</span>
                 </label>
@@ -266,7 +266,7 @@ export default function VendorSignUpPage() {
                         aria-label="Profile image preview"
                       />
                     ) : (
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-[#9BBEC8] bg-[#DDF2FD]/30 text-[#427D9D]">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-[#9BBEC8] bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 text-[#427D9D]">
                         <UserRound className="h-6 w-6" />
                       </div>
                     )}
@@ -291,7 +291,7 @@ export default function VendorSignUpPage() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploadingImage}
-                      className="text-sm font-semibold text-[#164863] hover:underline"
+                      className="text-sm font-semibold text-[#164863] dark:text-[#DDF2FD] hover:underline"
                     >
                       {uploadingImage
                         ? "Uploading..."
@@ -320,7 +320,7 @@ export default function VendorSignUpPage() {
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Full Name
                 </label>
@@ -336,7 +336,7 @@ export default function VendorSignUpPage() {
                     placeholder="Enter your full name"
                     autoComplete="name"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -346,7 +346,7 @@ export default function VendorSignUpPage() {
               <div>
                 <label
                   htmlFor="businessName"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Business Name
                 </label>
@@ -361,7 +361,7 @@ export default function VendorSignUpPage() {
                     onChange={(e) => setBusinessName(e.target.value)}
                     placeholder="Enter your business name"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -371,7 +371,7 @@ export default function VendorSignUpPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Email Address
                 </label>
@@ -387,7 +387,7 @@ export default function VendorSignUpPage() {
                     placeholder="you@example.com"
                     autoComplete="email"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -397,7 +397,7 @@ export default function VendorSignUpPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Password
                 </label>
@@ -414,7 +414,7 @@ export default function VendorSignUpPage() {
                     autoComplete="new-password"
                     minLength={6}
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-12 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-12 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
 
                   <button
@@ -423,7 +423,7 @@ export default function VendorSignUpPage() {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863]"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -455,7 +455,7 @@ export default function VendorSignUpPage() {
                         <p
                           key={item.label}
                           className={`flex items-center gap-2 text-xs ${
-                            item.valid ? "text-[#164863]" : "text-gray-400"
+                            item.valid ? "text-[#164863] dark:text-[#DDF2FD]" : "text-gray-400"
                           }`}
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" />
@@ -502,11 +502,11 @@ export default function VendorSignUpPage() {
 
             {/* Sign In */}
 
-            <p className="mt-8 text-center text-sm text-gray-500">
+            <p className="mt-8 text-center text-sm text-gray-500 dark:text-[#9BBEC8]">
               Already have a vendor account?{" "}
               <Link
                 href="/sign-in"
-                className="font-bold text-[#164863] transition-colors hover:text-[#427D9D]"
+                className="font-bold text-[#164863] dark:text-[#DDF2FD] transition-colors hover:text-[#427D9D]"
               >
                 Sign In
               </Link>
@@ -514,11 +514,11 @@ export default function VendorSignUpPage() {
 
             {/* Customer Signup */}
 
-            <p className="mt-3 text-center text-sm text-gray-500">
+            <p className="mt-3 text-center text-sm text-gray-500 dark:text-[#9BBEC8]">
               Looking for a customer account?{" "}
               <Link
                 href="/sign-up"
-                className="font-bold text-[#164863] transition-colors hover:text-[#427D9D]"
+                className="font-bold text-[#164863] dark:text-[#DDF2FD] transition-colors hover:text-[#427D9D]"
               >
                 Sign Up
               </Link>
@@ -529,7 +529,7 @@ export default function VendorSignUpPage() {
             <div className="mt-8 border-t border-[#9BBEC8]/30 pt-6 text-center">
               <Link
                 href="/"
-                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863]"
+                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
               >
                 ← Back to Home
               </Link>

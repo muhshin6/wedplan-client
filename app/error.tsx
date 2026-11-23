@@ -17,13 +17,13 @@ export default function ErrorPage({
   }, [error])
 
   return (
-    <main className="flex min-h-[70vh] items-center justify-center bg-[#DDF2FD]/40 px-4">
-      <div className="w-full max-w-lg rounded-2xl border border-[#9BBEC8]/40 bg-white p-8 text-center shadow-xl shadow-[#164863]/5 sm:p-10">
+    <main className="flex min-h-[70vh] items-center justify-center bg-[#DDF2FD]/40 px-4 dark:bg-[#0B1922]">
+      <div className="w-full max-w-lg rounded-2xl border border-[#9BBEC8]/40 bg-white p-8 text-center shadow-xl shadow-[#164863]/5 sm:p-10 dark:bg-[#122B3A]">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-100 text-red-600">
           <AlertTriangle className="h-10 w-10" />
         </div>
 
-        <h1 className="mt-6 text-2xl font-bold text-[#164863]">
+        <h1 className="mt-6 text-2xl font-bold text-[#164863] dark:text-[#DDF2FD]">
           Something went wrong
         </h1>
 

@@ -52,7 +52,7 @@ export default function FeaturedServicesView({
   services: FeaturedService[]
 }) {
   return (
-    <section className="bg-[#DDF2FD]/50 px-6 py-20 md:px-10 lg:px-16">
+    <section className="bg-[#DDF2FD] px-6 py-20 md:px-10 lg:px-16 dark:bg-[#0B1922] dark:bg-[#122B3A]/50">
       <div className="mx-auto max-w-7xl">
         {/* Section Header */}
         <motion.div
@@ -67,11 +67,11 @@ export default function FeaturedServicesView({
               Discover Our Services
             </span>
 
-            <h2 className="text-3xl font-bold text-[#164863] md:text-4xl">
+            <h2 className="text-3xl font-bold text-[#164863] md:text-4xl dark:text-[#DDF2FD]">
               Featured Wedding Services
             </h2>
 
-            <p className="mt-4 max-w-xl text-base leading-7 text-gray-600">
+            <p className="mt-4 max-w-xl text-base leading-7 text-gray-600 dark:text-[#9BBEC8]">
               Find the perfect wedding professionals to make your special day
               unforgettable.
             </p>
@@ -79,7 +79,7 @@ export default function FeaturedServicesView({
 
           <Link
             href="/services"
-            className="group inline-flex items-center gap-2 font-semibold text-[#164863] transition-colors hover:text-[#427D9D]"
+            className="group inline-flex items-center gap-2 font-semibold text-[#164863] transition-colors hover:text-[#427D9D] dark:text-[#DDF2FD]"
           >
             View All Services
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -112,10 +112,10 @@ export default function FeaturedServicesView({
                     y: -8,
                     transition: { duration: 0.25 },
                   }}
-                  className="group overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl"
+                  className="group overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl dark:bg-[#122B3A]"
                 >
                   {/* Service Image */}
-                  <div className="relative h-56 overflow-hidden bg-[#DDF2FD]">
+                  <div className="relative h-56 overflow-hidden bg-[#DDF2FD] dark:bg-[#122B3A]">
                     {image ? (
                       <Image
                         src={image}
@@ -139,7 +139,7 @@ export default function FeaturedServicesView({
                           ? "/services?category=Photography%2CVideography"
                           : `/services?category=${encodeURIComponent(service.category)}`
                       }
-                      className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#164863] backdrop-blur transition-colors hover:bg-[#164863] hover:text-white"
+                      className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#164863] backdrop-blur transition-colors hover:bg-[#164863] hover:text-white dark:text-[#DDF2FD]"
                     >
                       {service.category}
                     </Link>
@@ -147,11 +147,11 @@ export default function FeaturedServicesView({
 
                   {/* Card Content */}
                   <div className="p-5">
-                    <h3 className="line-clamp-1 text-xl font-bold text-[#164863]">
+                    <h3 className="line-clamp-1 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
                       {service.name}
                     </h3>
 
-                    <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+                    <div className="mt-3 flex items-center gap-2 text-sm text-gray-500 dark:text-[#9BBEC8]">
                       <MapPin className="h-4 w-4 text-[#427D9D]" />
                       <span className="line-clamp-1">
                         {service.location || "Location not specified"}
@@ -161,10 +161,10 @@ export default function FeaturedServicesView({
                     {/* Vendor Information */}
                     <div className="mt-4 flex items-center justify-between border-t border-[#9BBEC8]/30 pt-4">
                       <div>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-gray-500 dark:text-[#9BBEC8]">
                           Service Provider
                         </p>
-                        <p className="mt-1 font-medium text-[#164863]">
+                        <p className="mt-1 font-medium text-[#164863] dark:text-[#DDF2FD]">
                           {vendor?.name ||
                             vendor?.businessName ||
                             "Wedding Vendor"}
@@ -172,8 +172,10 @@ export default function FeaturedServicesView({
                       </div>
 
                       <div className="text-right">
-                        <p className="text-xs text-gray-500">Starting from</p>
-                        <p className="mt-1 text-lg font-bold text-[#164863]">
+                        <p className="text-xs text-gray-500 dark:text-[#9BBEC8]">
+                          Starting from
+                        </p>
+                        <p className="mt-1 text-lg font-bold text-[#164863] dark:text-[#DDF2FD]">
                           ৳{Number(service.price).toLocaleString("en-BD")}
                         </p>
                       </div>
@@ -196,12 +198,12 @@ export default function FeaturedServicesView({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="rounded-2xl border border-[#9BBEC8]/40 bg-white px-6 py-16 text-center"
+            className="rounded-2xl border border-[#9BBEC8]/40 bg-white px-6 py-16 text-center dark:bg-[#122B3A]"
           >
-            <h3 className="text-xl font-semibold text-[#164863]">
+            <h3 className="text-xl font-semibold text-[#164863] dark:text-[#DDF2FD]">
               No Featured Services Yet
             </h3>
-            <p className="mt-3 text-gray-500">
+            <p className="mt-3 text-gray-500 dark:text-[#9BBEC8]">
               Approved wedding services will appear here soon.
             </p>
           </motion.div>
@@ -217,7 +219,7 @@ export default function FeaturedServicesView({
         >
           <Link
             href="/services?category=Photography%2CVideography"
-            className="inline-flex items-center gap-2 rounded-full border-2 border-[#164863] px-7 py-3 font-semibold text-[#164863] transition-all hover:bg-[#164863] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-[#164863] px-7 py-3 font-semibold text-[#164863] transition-all hover:bg-[#164863] hover:text-white dark:text-[#DDF2FD]"
           >
             Explore Photography & Videography
             <ArrowRight className="h-4 w-4" />

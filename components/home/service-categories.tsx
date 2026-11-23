@@ -83,7 +83,7 @@ const cardVariants = {
 
 export default function ServiceCategories() {
   return (
-    <section className="relative overflow-hidden bg-[#DDF2FD]/50 px-6 py-24 md:px-10 lg:px-16">
+    <section className="relative overflow-hidden bg-[#DDF2FD] px-6 py-24 md:px-10 lg:px-16 dark:bg-[#0B1922] dark:bg-[#122B3A]/50">
       {/* Background Decoration */}
       <div className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#427D9D]/10 blur-[100px]" />
 
@@ -101,14 +101,14 @@ export default function ServiceCategories() {
             Explore Categories
           </span>
 
-          <h2 className="max-w-3xl text-3xl leading-tight font-bold tracking-tight text-[#164863] sm:text-4xl md:text-5xl">
+          <h2 className="max-w-3xl text-3xl leading-tight font-bold tracking-tight text-[#164863] sm:text-4xl md:text-5xl dark:text-[#DDF2FD]">
             Everything You Need
             <span className="mt-2 block text-[#427D9D]">
               For Your Perfect Wedding
             </span>
           </h2>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#164863]/70 md:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#164863] md:text-lg dark:text-[#9BBEC8] dark:text-[#DDF2FD]/70">
             From beautiful venues to unforgettable moments, discover trusted
             wedding professionals who bring your dream celebration to life.
           </p>
@@ -136,14 +136,14 @@ export default function ServiceCategories() {
               >
                 <Link
                   href={`/services?category=${encodeURIComponent(category.category)}`}
-                  className="group relative flex h-full min-h-[245px] flex-col overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white/80 p-7 shadow-[0_8px_30px_rgba(22,72,99,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-[#427D9D]/50 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,72,99,0.12)]"
+                  className="group relative flex h-full min-h-[245px] flex-col overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white/80 p-7 shadow-[0_8px_30px_rgba(22,72,99,0.04)] backdrop-blur-xl transition-all duration-300 hover:border-[#427D9D]/50 hover:bg-white hover:shadow-[0_20px_50px_rgba(22,72,99,0.12)] dark:bg-[#122B3A]/80"
                 >
                   {/* Hover Background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#DDF2FD]/0 via-[#DDF2FD]/0 to-[#9BBEC8]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
                   <div className="relative flex items-start justify-between">
                     {/* Icon */}
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#DDF2FD] text-[#164863] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#164863] group-hover:text-white">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#DDF2FD] text-[#164863] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#164863] group-hover:text-white dark:bg-[#122B3A] dark:text-[#DDF2FD]">
                       <Icon className="h-6 w-6" strokeWidth={1.8} />
                     </div>
 
@@ -155,11 +155,11 @@ export default function ServiceCategories() {
 
                   {/* Content */}
                   <div className="relative mt-7">
-                    <h3 className="text-xl font-bold tracking-tight text-[#164863] transition-colors group-hover:text-[#427D9D]">
+                    <h3 className="text-xl font-bold tracking-tight text-[#164863] transition-colors group-hover:text-[#427D9D] dark:text-[#DDF2FD]">
                       {category.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-6 text-[#164863]/65">
+                    <p className="mt-3 text-sm leading-6 text-[#164863] dark:text-[#9BBEC8] dark:text-[#DDF2FD]/65">
                       {category.description}
                     </p>
                   </div>
@@ -170,7 +170,7 @@ export default function ServiceCategories() {
                       Explore Services
                     </span>
 
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[#9BBEC8]/50 text-[#164863] transition-all duration-300 group-hover:border-[#164863] group-hover:bg-[#164863] group-hover:text-white">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[#9BBEC8]/50 text-[#164863] transition-all duration-300 group-hover:border-[#164863] group-hover:bg-[#164863] group-hover:text-white dark:text-[#DDF2FD]">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export default function ServiceCategories() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-12 text-center"
         >
-          <p className="text-sm text-[#164863]/60">
+          <p className="text-sm text-[#164863] dark:text-[#9BBEC8] dark:text-[#DDF2FD]/60">
             Your dream wedding starts with the right people.
           </p>
         </motion.div>

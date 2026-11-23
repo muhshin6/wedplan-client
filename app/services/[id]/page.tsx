@@ -187,7 +187,7 @@ function ServiceDetailsContent() {
   // Loading State
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#F4F8FB] px-4 py-12">
+      <main className="min-h-screen bg-[#F4F8FB] px-4 py-12 dark:bg-[#0B1922]">
         <div className="mx-auto max-w-7xl animate-pulse">
           <div className="mb-8 h-5 w-40 rounded bg-slate-200" />
 
@@ -218,13 +218,13 @@ function ServiceDetailsContent() {
         : "Service Unavailable"
 
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#F4F8FB] px-4">
-        <div className="w-full max-w-md rounded-3xl border border-[#DDF2FD] bg-white p-8 text-center shadow-sm">
+      <main className="flex min-h-screen items-center justify-center bg-[#F4F8FB] px-4 dark:bg-[#0B1922]">
+        <div className="w-full max-w-md rounded-3xl border border-[#DDF2FD] bg-white p-8 text-center shadow-sm dark:bg-[#122B3A]">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#DDF2FD]">
             <RefreshCw className="h-7 w-7 text-[#427D9D]" />
           </div>
 
-          <h1 className="mt-6 text-2xl font-bold text-[#164863]">
+          <h1 className="mt-6 text-2xl font-bold text-[#164863] dark:text-[#DDF2FD]">
             {errorHeading}
           </h1>
 
@@ -244,7 +244,7 @@ function ServiceDetailsContent() {
 
             <Link
               href="/services"
-              className="inline-flex flex-1 items-center justify-center rounded-xl border border-[#DDF2FD] px-5 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#F4F8FB]"
+              className="inline-flex flex-1 items-center justify-center rounded-xl border border-[#DDF2FD] px-5 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:text-[#DDF2FD]"
             >
               Browse Services
             </Link>
@@ -255,7 +255,7 @@ function ServiceDetailsContent() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F4F8FB]">
+    <main className="min-h-screen bg-[#F4F8FB] dark:bg-[#0B1922]">
       {/* Hero Image */}
       <section className="px-4 pt-6 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
@@ -267,7 +267,7 @@ function ServiceDetailsContent() {
           >
             <Link
               href="/"
-              className="flex items-center gap-2 text-slate-400 transition hover:text-[#164863]"
+              className="flex items-center gap-2 text-slate-400 transition hover:text-[#164863] dark:text-[#DDF2FD]"
             >
               <Home className="h-4 w-4" />
               Home
@@ -277,14 +277,16 @@ function ServiceDetailsContent() {
 
             <Link
               href="/services"
-              className="text-slate-400 transition hover:text-[#164863]"
+              className="text-slate-400 transition hover:text-[#164863] dark:text-[#DDF2FD]"
             >
               Services
             </Link>
 
             <span className="text-slate-300">/</span>
 
-            <span className="font-semibold text-[#164863]">Details</span>
+            <span className="font-semibold text-[#164863] dark:text-[#DDF2FD]">
+              Details
+            </span>
           </motion.div>
 
           {/* Image Banner */}
@@ -313,7 +315,7 @@ function ServiceDetailsContent() {
 
             {/* Category Badge */}
             <div className="absolute top-5 left-5 sm:top-8 sm:left-8">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/90 px-4 py-2 text-xs font-bold text-[#164863] shadow-lg backdrop-blur">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white px-4 py-2 text-xs font-bold text-[#164863] shadow-lg backdrop-blur dark:bg-[#122B3A]/90 dark:text-[#DDF2FD]">
                 <Sparkles className="h-4 w-4" />
                 {service.category}
               </span>
@@ -383,10 +385,10 @@ function ServiceDetailsContent() {
             className="space-y-7"
           >
             {/* About Service */}
-            <div className="rounded-3xl border border-[#DDF2FD] bg-white p-6 shadow-sm sm:p-9">
+            <div className="rounded-3xl border border-[#DDF2FD] bg-white p-6 shadow-sm sm:p-9 dark:bg-[#122B3A]">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#DDF2FD]">
-                  <Heart className="h-6 w-6 text-[#164863]" />
+                  <Heart className="h-6 w-6 text-[#164863] dark:text-[#DDF2FD]" />
                 </div>
 
                 <div>
@@ -394,7 +396,7 @@ function ServiceDetailsContent() {
                     SERVICE OVERVIEW
                   </p>
 
-                  <h2 className="mt-1 text-xl font-bold text-[#164863]">
+                  <h2 className="mt-1 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
                     About This Service
                   </h2>
                 </div>
@@ -406,23 +408,23 @@ function ServiceDetailsContent() {
             </div>
 
             {/* Service Highlights */}
-            <div className="rounded-3xl border border-[#DDF2FD] bg-white p-6 shadow-sm sm:p-9">
+            <div className="rounded-3xl border border-[#DDF2FD] bg-white p-6 shadow-sm sm:p-9 dark:bg-[#122B3A]">
               <p className="text-xs font-bold tracking-wider text-[#427D9D]">
                 WHY CHOOSE THIS SERVICE
               </p>
 
-              <h2 className="mt-2 text-xl font-bold text-[#164863]">
+              <h2 className="mt-2 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
                 Plan With Confidence
               </h2>
 
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <ShieldCheck className="h-5 w-5 text-[#164863]" />
+                    <ShieldCheck className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-[#164863]">
+                    <h3 className="text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                       Verified Service
                     </h3>
 
@@ -434,11 +436,11 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <CalendarHeart className="h-5 w-5 text-[#164863]" />
+                    <CalendarHeart className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-[#164863]">
+                    <h3 className="text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                       Wedding Planning
                     </h3>
 
@@ -450,11 +452,11 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <MapPin className="h-5 w-5 text-[#164863]" />
+                    <MapPin className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-[#164863]">
+                    <h3 className="text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                       Service Location
                     </h3>
 
@@ -466,11 +468,11 @@ function ServiceDetailsContent() {
 
                 <div className="flex gap-4">
                   <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                    <CheckCircle2 className="h-5 w-5 text-[#164863]" />
+                    <CheckCircle2 className="h-5 w-5 text-[#164863] dark:text-[#DDF2FD]" />
                   </div>
 
                   <div>
-                    <h3 className="text-sm font-bold text-[#164863]">
+                    <h3 className="text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                       Quality Focused
                     </h3>
 
@@ -485,7 +487,7 @@ function ServiceDetailsContent() {
             {/* Back Navigation */}
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[#427D9D] transition hover:text-[#164863]"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#427D9D] transition hover:text-[#164863] dark:text-[#DDF2FD]"
             >
               <ArrowLeft className="h-4 w-4" />
               Explore More Services
@@ -499,7 +501,7 @@ function ServiceDetailsContent() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="lg:sticky lg:top-24"
           >
-            <div className="overflow-hidden rounded-3xl border border-[#DDF2FD] bg-white shadow-lg shadow-[#164863]/5">
+            <div className="overflow-hidden rounded-3xl border border-[#DDF2FD] bg-white shadow-lg shadow-[#164863]/5 dark:bg-[#122B3A]">
               {/* Price Header */}
               <div className="bg-linear-to-br from-[#164863] to-[#427D9D] p-7 text-white">
                 <div className="flex items-center gap-2 text-sm font-medium text-white/75">
@@ -524,7 +526,7 @@ function ServiceDetailsContent() {
 
               {/* Price Content */}
               <div className="p-6">
-                <h3 className="text-lg font-bold text-[#164863]">
+                <h3 className="text-lg font-bold text-[#164863] dark:text-[#DDF2FD]">
                   Interested in this service?
                 </h3>
 
@@ -559,8 +561,8 @@ function ServiceDetailsContent() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-[#F4F8FB] p-4">
-                  <div className="flex items-center gap-2 text-sm font-bold text-[#164863]">
+                <div className="rounded-2xl bg-[#F4F8FB] p-4 dark:bg-[#0B1922]">
+                  <div className="flex items-center gap-2 text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                     <Heart className="h-4 w-4" />
                     Make Your Day Special
                   </div>
@@ -610,23 +612,23 @@ function ServiceDetailsContent() {
             initial={{ opacity: 0, y: 25, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 25, scale: 0.97 }}
-            className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-[#122B3A]"
           >
             {/* Modal Header */}
             <div className="relative overflow-hidden bg-linear-to-br from-[#164863] to-[#427D9D] px-6 py-8 text-white sm:px-8">
-              <div className="absolute -top-12 -right-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+              <div className="absolute -top-12 -right-10 h-40 w-40 rounded-full bg-white blur-2xl dark:bg-[#122B3A]/10" />
 
               <button
                 type="button"
                 onClick={() => setIsBookingOpen(false)}
-                className="absolute top-5 right-5 flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition hover:bg-white/25"
+                className="absolute top-5 right-5 flex h-9 w-9 items-center justify-center rounded-full bg-white transition hover:bg-white dark:bg-[#122B3A]/15 dark:bg-[#122B3A]/25"
                 aria-label="Close booking modal"
               >
                 <X className="h-5 w-5" />
               </button>
 
               <div className="relative">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#122B3A]/15">
                   <CalendarHeart className="h-6 w-6" />
                 </div>
 
@@ -650,9 +652,9 @@ function ServiceDetailsContent() {
               className="space-y-5 p-6 sm:p-8"
             >
               {/* Selected Service */}
-              <div className="flex items-center gap-4 rounded-2xl border border-[#DDF2FD] bg-[#F4F8FB] p-4">
+              <div className="flex items-center gap-4 rounded-2xl border border-[#DDF2FD] bg-[#F4F8FB] p-4 dark:bg-[#0B1922]">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#DDF2FD]">
-                  <Heart className="h-6 w-6 text-[#164863]" />
+                  <Heart className="h-6 w-6 text-[#164863] dark:text-[#DDF2FD]" />
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -660,7 +662,7 @@ function ServiceDetailsContent() {
                     SELECTED SERVICE
                   </p>
 
-                  <h3 className="mt-1 truncate text-sm font-bold text-[#164863]">
+                  <h3 className="mt-1 truncate text-sm font-bold text-[#164863] dark:text-[#DDF2FD]">
                     {service.name}
                   </h3>
 
@@ -674,7 +676,7 @@ function ServiceDetailsContent() {
               <div>
                 <label
                   htmlFor="customerName"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Your Name
                 </label>
@@ -694,7 +696,7 @@ function ServiceDetailsContent() {
                       }))
                     }
                     placeholder="Enter your full name"
-                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70"
+                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A]"
                   />
                 </div>
               </div>
@@ -703,7 +705,7 @@ function ServiceDetailsContent() {
               <div>
                 <label
                   htmlFor="customerEmail"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Email Address
                 </label>
@@ -723,7 +725,7 @@ function ServiceDetailsContent() {
                       }))
                     }
                     placeholder="Enter your email"
-                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70"
+                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A]"
                   />
                 </div>
               </div>
@@ -732,7 +734,7 @@ function ServiceDetailsContent() {
               <div>
                 <label
                   htmlFor="eventDate"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Wedding / Event Date
                 </label>
@@ -752,7 +754,7 @@ function ServiceDetailsContent() {
                         eventDate: event.target.value,
                       }))
                     }
-                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70"
+                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A]"
                   />
                 </div>
               </div>
@@ -761,7 +763,7 @@ function ServiceDetailsContent() {
               <div>
                 <label
                   htmlFor="eventLocation"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Wedding / Event Location{" "}
                   <span className="font-normal text-slate-400">(Optional)</span>
@@ -781,7 +783,7 @@ function ServiceDetailsContent() {
                       }))
                     }
                     placeholder="e.g. Dhaka, Bangladesh"
-                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70"
+                    className="w-full rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A]"
                   />
                 </div>
               </div>
@@ -790,7 +792,7 @@ function ServiceDetailsContent() {
               <div>
                 <label
                   htmlFor="bookingMessage"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Additional Requirements{" "}
                   <span className="font-normal text-slate-400">(Optional)</span>
@@ -811,7 +813,7 @@ function ServiceDetailsContent() {
                       }))
                     }
                     placeholder="Tell the vendor about your wedding plans..."
-                    className="w-full resize-none rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70"
+                    className="w-full resize-none rounded-xl border border-[#DDF2FD] bg-white py-3 pr-4 pl-11 text-sm text-slate-700 transition outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A]"
                   />
 
                   <p className="mt-1 text-right text-xs text-slate-400">
@@ -821,7 +823,7 @@ function ServiceDetailsContent() {
               </div>
 
               {/* Information */}
-              <div className="rounded-xl border border-[#DDF2FD] bg-[#F4F8FB] p-4">
+              <div className="rounded-xl border border-[#DDF2FD] bg-[#F4F8FB] p-4 dark:bg-[#0B1922]">
                 <div className="flex gap-3">
                   <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#427D9D]" />
 

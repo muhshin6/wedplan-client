@@ -243,7 +243,7 @@ export default function ServicesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F4F8FB]">
+    <main className="min-h-screen bg-[#F4F8FB] dark:bg-[#0B1922]">
       {/* Hero Section */}
       <section className="px-4 pt-8 sm:px-6 lg:px-8">
         <motion.div
@@ -260,7 +260,7 @@ export default function ServicesPage() {
           <div className="pointer-events-none absolute right-1/4 -bottom-40 h-80 w-80 rounded-full bg-[#9BBEC8]/10 blur-3xl" />
 
           <div className="relative z-10 max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-[#DDF2FD] backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white px-4 py-2 text-xs font-semibold tracking-wide text-[#DDF2FD] backdrop-blur dark:bg-[#122B3A]/10">
               <Sparkles className="h-4 w-4" />
               MAKE YOUR DREAM WEDDING A REALITY
             </span>
@@ -307,7 +307,7 @@ export default function ServicesPage() {
 
           <div className="mt-3 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight text-[#164863] sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight text-[#164863] sm:text-4xl dark:text-[#DDF2FD]">
                 Find Your Perfect
                 <span className="text-[#427D9D]"> Wedding Services</span>
               </h2>
@@ -326,7 +326,7 @@ export default function ServicesPage() {
         </div>
 
         {/* Search & Filters */}
-        <div className="rounded-2xl border border-[#DDF2FD] bg-white p-4 shadow-sm sm:p-6">
+        <div className="rounded-2xl border border-[#DDF2FD] bg-white p-4 shadow-sm sm:p-6 dark:bg-[#122B3A]">
           <div className="flex flex-col gap-4 lg:flex-row">
             {/* Search */}
             <div className="relative flex-1">
@@ -337,7 +337,7 @@ export default function ServicesPage() {
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
                 placeholder="Search by service, category or location..."
-                className="h-13 w-full rounded-xl border border-[#DDF2FD] bg-[#F8FBFD] pr-11 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:bg-white focus:ring-4 focus:ring-[#DDF2FD]/70"
+                className="h-13 w-full rounded-xl border border-[#DDF2FD] bg-[#F8FBFD] pr-11 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-slate-400 focus:border-[#427D9D] focus:bg-white focus:ring-4 focus:ring-[#DDF2FD]/70 dark:bg-[#122B3A] dark:text-[#DDF2FD]"
               />
 
               {searchQuery && (
@@ -345,7 +345,7 @@ export default function ServicesPage() {
                   type="button"
                   onClick={() => setSearchQuery("")}
                   aria-label="Clear search"
-                  className="absolute top-1/2 right-4 -translate-y-1/2 text-slate-400 hover:text-[#164863]"
+                  className="absolute top-1/2 right-4 -translate-y-1/2 text-slate-400 hover:text-[#164863] dark:text-[#DDF2FD]"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -353,7 +353,7 @@ export default function ServicesPage() {
             </div>
 
             {/* Result Count */}
-            <div className="flex h-13 items-center gap-2 rounded-xl bg-[#F4F8FB] px-5 text-sm font-medium text-[#164863]">
+            <div className="flex h-13 items-center gap-2 rounded-xl bg-[#F4F8FB] px-5 text-sm font-medium text-[#164863] dark:bg-[#0B1922] dark:text-[#DDF2FD]">
               <SlidersHorizontal className="h-4 w-4 text-[#427D9D]" />
               {filteredServices.length} Results
             </div>
@@ -372,7 +372,7 @@ export default function ServicesPage() {
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="text-xs font-semibold text-[#427D9D] hover:text-[#164863]"
+                  className="text-xs font-semibold text-[#427D9D] hover:text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Clear filters
                 </button>
@@ -388,7 +388,7 @@ export default function ServicesPage() {
                   className={`shrink-0 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
                     activeCategory === category
                       ? "bg-[#164863] text-white shadow-lg shadow-[#164863]/15"
-                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB]"
+                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
                   }`}
                 >
                   {category}
@@ -412,7 +412,7 @@ export default function ServicesPage() {
                   className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
                     activeLocation === location
                       ? "bg-[#427D9D] text-white shadow-lg shadow-[#427D9D]/15"
-                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB]"
+                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB] dark:bg-[#0B1922] dark:bg-[#122B3A]"
                   }`}
                 >
                   <MapPin className="h-4 w-4" />
@@ -426,7 +426,7 @@ export default function ServicesPage() {
         {/* Services Header */}
         <div className="mt-12 mb-7 flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-bold text-[#164863] sm:text-2xl">
+            <h3 className="text-xl font-bold text-[#164863] sm:text-2xl dark:text-[#DDF2FD]">
               Available Services
             </h3>
 
@@ -435,7 +435,7 @@ export default function ServicesPage() {
             </p>
           </div>
 
-          <span className="hidden rounded-full bg-[#DDF2FD] px-4 py-2 text-xs font-bold text-[#164863] sm:block">
+          <span className="hidden rounded-full bg-[#DDF2FD] px-4 py-2 text-xs font-bold text-[#164863] sm:block dark:text-[#DDF2FD]">
             {isLoading ? "Loading..." : `${filteredServices.length} Found`}
           </span>
         </div>
@@ -446,7 +446,7 @@ export default function ServicesPage() {
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div
                 key={item}
-                className="animate-pulse overflow-hidden rounded-2xl border border-[#DDF2FD] bg-white"
+                className="animate-pulse overflow-hidden rounded-2xl border border-[#DDF2FD] bg-white dark:bg-[#122B3A]"
               >
                 <div className="h-60 bg-slate-200" />
 
@@ -463,12 +463,12 @@ export default function ServicesPage() {
 
         {/* Error */}
         {!isLoading && error && (
-          <div className="rounded-3xl border border-red-100 bg-white px-6 py-16 text-center shadow-sm">
+          <div className="rounded-3xl border border-red-100 bg-white px-6 py-16 text-center shadow-sm dark:bg-[#122B3A]">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
               <RefreshCw className="h-7 w-7 text-red-500" />
             </div>
 
-            <h3 className="mt-5 text-xl font-bold text-[#164863]">
+            <h3 className="mt-5 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
               Unable to Load Services
             </h3>
 
@@ -489,12 +489,12 @@ export default function ServicesPage() {
 
         {/* Empty State */}
         {!isLoading && !error && filteredServices.length === 0 && (
-          <div className="rounded-3xl border border-[#DDF2FD] bg-white px-6 py-20 text-center shadow-sm">
+          <div className="rounded-3xl border border-[#DDF2FD] bg-white px-6 py-20 text-center shadow-sm dark:bg-[#122B3A]">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#DDF2FD]">
               <Search className="h-7 w-7 text-[#427D9D]" />
             </div>
 
-            <h3 className="mt-5 text-xl font-bold text-[#164863]">
+            <h3 className="mt-5 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
               {activeCategory !== "All" && !searchQuery
                 ? `No ${activeCategory} services available`
                 : "No Services Found"}
@@ -535,7 +535,7 @@ export default function ServicesPage() {
                     delay: Math.min(index * 0.05, 0.25),
                   }}
                   whileHover={{ y: -7 }}
-                  className="group overflow-hidden rounded-2xl border border-[#DDF2FD] bg-white shadow-sm transition-all duration-300 hover:border-[#9BBEC8] hover:shadow-xl hover:shadow-[#164863]/10"
+                  className="group overflow-hidden rounded-2xl border border-[#DDF2FD] bg-white shadow-sm transition-all duration-300 hover:border-[#9BBEC8] hover:shadow-xl hover:shadow-[#164863]/10 dark:bg-[#122B3A]"
                 >
                   {/* Image */}
                   <div className="relative h-60 overflow-hidden bg-linear-to-br from-[#DDF2FD] to-[#9BBEC8]">
@@ -548,7 +548,7 @@ export default function ServicesPage() {
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center">
-                        <Heart className="h-16 w-16 text-[#164863]/20" />
+                        <Heart className="h-16 w-16 text-[#164863] dark:text-[#DDF2FD]/20" />
                       </div>
                     )}
 
@@ -556,7 +556,7 @@ export default function ServicesPage() {
                     <div className="absolute inset-0 bg-linear-to-t from-[#164863]/40 via-transparent to-transparent" />
 
                     {/* Category */}
-                    <span className="absolute top-4 left-4 rounded-full border border-white/50 bg-white/90 px-4 py-2 text-xs font-bold text-[#164863] shadow-sm backdrop-blur">
+                    <span className="absolute top-4 left-4 rounded-full border border-white/50 bg-white px-4 py-2 text-xs font-bold text-[#164863] shadow-sm backdrop-blur dark:bg-[#122B3A]/90 dark:text-[#DDF2FD]">
                       {service.category}
                     </span>
 
@@ -569,7 +569,7 @@ export default function ServicesPage() {
 
                   {/* Content */}
                   <div className="p-5">
-                    <h3 className="line-clamp-1 text-lg font-bold text-[#164863] transition-colors group-hover:text-[#427D9D]">
+                    <h3 className="line-clamp-1 text-lg font-bold text-[#164863] transition-colors group-hover:text-[#427D9D] dark:text-[#DDF2FD]">
                       {service.name}
                     </h3>
 
@@ -597,7 +597,7 @@ export default function ServicesPage() {
                           Starting from
                         </p>
 
-                        <p className="mt-1 text-xl font-bold text-[#164863]">
+                        <p className="mt-1 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
                           ৳{Number(service.price || 0).toLocaleString("en-BD")}
                         </p>
                       </div>

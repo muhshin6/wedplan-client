@@ -178,7 +178,7 @@ export default function SignUpPage() {
 
   return (
     <main className="min-h-screen bg-[#DDF2FD] p-4 md:p-6 lg:p-8">
-      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl overflow-hidden rounded-[32px] bg-white dark:bg-[#122B3A] shadow-2xl shadow-[#164863]/10 lg:grid-cols-2">
         {/* LEFT SIDE */}
 
         <section className="relative hidden overflow-hidden bg-[#164863] p-12 lg:flex lg:flex-col lg:justify-between">
@@ -192,7 +192,7 @@ export default function SignUpPage() {
             className="relative z-10"
           >
             <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-[#122B3A]/15 backdrop-blur-md">
                 <Heart className="h-6 w-6 fill-[#DDF2FD] text-[#DDF2FD]" />
               </div>
 
@@ -217,7 +217,7 @@ export default function SignUpPage() {
               unforgettable wedding memories.
             </p>
 
-            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white/10 p-5 backdrop-blur-xl">
+            <div className="mt-12 max-w-sm rounded-2xl border border-white/20 bg-white dark:bg-[#122B3A]/10 p-5 backdrop-blur-xl">
               <div className="flex items-center gap-3">
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#9BBEC8]/20">
                   <Heart className="h-6 w-6 text-[#DDF2FD]" />
@@ -257,7 +257,7 @@ export default function SignUpPage() {
                 <Heart className="h-5 w-5 fill-white text-white" />
               </div>
 
-              <span className="text-2xl font-extrabold text-[#164863]">
+              <span className="text-2xl font-extrabold text-[#164863] dark:text-[#DDF2FD]">
                 WedPlan.
               </span>
             </Link>
@@ -265,16 +265,16 @@ export default function SignUpPage() {
             {/* Heading */}
 
             <div className="mb-8">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#DDF2FD] px-4 py-2 text-xs font-bold tracking-wider text-[#164863] uppercase">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#DDF2FD] px-4 py-2 text-xs font-bold tracking-wider text-[#164863] dark:text-[#DDF2FD] uppercase">
                 <Sparkles className="h-3.5 w-3.5" />
                 Get Started
               </span>
 
-              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863]">
+              <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-[#164863] dark:text-[#DDF2FD]">
                 Create your account
               </h2>
 
-              <p className="mt-3 leading-7 text-gray-500">
+              <p className="mt-3 leading-7 text-gray-500 dark:text-[#9BBEC8]">
                 Start your wedding planning journey with WedPlan. It only takes
                 a minute.
               </p>
@@ -285,7 +285,7 @@ export default function SignUpPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Profile Image (optional) */}
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#164863]">
+                <label className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]">
                   Profile Image{" "}
                   <span className="font-normal text-gray-400">(Optional)</span>
                 </label>
@@ -300,7 +300,7 @@ export default function SignUpPage() {
                         aria-label="Profile image preview"
                       />
                     ) : (
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-[#9BBEC8] bg-[#DDF2FD]/30 text-[#427D9D]">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-[#9BBEC8] bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 text-[#427D9D]">
                         <UserRound className="h-6 w-6" />
                       </div>
                     )}
@@ -325,7 +325,7 @@ export default function SignUpPage() {
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
                       disabled={uploadingImage}
-                      className="text-sm font-semibold text-[#164863] hover:underline"
+                      className="text-sm font-semibold text-[#164863] dark:text-[#DDF2FD] hover:underline"
                     >
                       {uploadingImage
                         ? "Uploading..."
@@ -351,7 +351,7 @@ export default function SignUpPage() {
 
               {/* Account Role */}
               <div>
-                <label className="mb-2 block text-sm font-semibold text-[#164863]">
+                <label className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]">
                   Account Role
                 </label>
 
@@ -362,7 +362,7 @@ export default function SignUpPage() {
                     className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition-all ${
                       role === "customer"
                         ? "border-[#164863] bg-[#164863] text-white shadow-lg shadow-[#164863]/15"
-                        : "border-[#9BBEC8]/60 bg-white text-[#164863] hover:bg-[#DDF2FD]/40"
+                        : "border-[#9BBEC8]/60 bg-white dark:bg-[#122B3A] text-[#164863] dark:text-[#DDF2FD] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922]"
                     }`}
                   >
                     <UserRound className="h-4 w-4" />
@@ -375,7 +375,7 @@ export default function SignUpPage() {
                     className={`flex items-center justify-center gap-2 rounded-xl border px-4 py-3 text-sm font-semibold transition-all ${
                       role === "vendor"
                         ? "border-[#164863] bg-[#164863] text-white shadow-lg shadow-[#164863]/15"
-                        : "border-[#9BBEC8]/60 bg-white text-[#164863] hover:bg-[#DDF2FD]/40"
+                        : "border-[#9BBEC8]/60 bg-white dark:bg-[#122B3A] text-[#164863] dark:text-[#DDF2FD] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922]"
                     }`}
                   >
                     <BriefcaseBusiness className="h-4 w-4" />
@@ -394,7 +394,7 @@ export default function SignUpPage() {
                 <div>
                   <label
                     htmlFor="businessName"
-                    className="mb-2 block text-sm font-semibold text-[#164863]"
+                    className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                   >
                     Business Name
                   </label>
@@ -409,7 +409,7 @@ export default function SignUpPage() {
                       onChange={(e) => setBusinessName(e.target.value)}
                       placeholder="Enter your business name"
                       required
-                      className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                      className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                     />
                   </div>
                 </div>
@@ -420,7 +420,7 @@ export default function SignUpPage() {
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Full Name
                 </label>
@@ -436,7 +436,7 @@ export default function SignUpPage() {
                     placeholder="Enter your full name"
                     autoComplete="name"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -446,7 +446,7 @@ export default function SignUpPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Email Address
                 </label>
@@ -462,7 +462,7 @@ export default function SignUpPage() {
                     placeholder="you@example.com"
                     autoComplete="email"
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-4 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-4 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
                 </div>
               </div>
@@ -472,7 +472,7 @@ export default function SignUpPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="mb-2 block text-sm font-semibold text-[#164863]"
+                  className="mb-2 block text-sm font-semibold text-[#164863] dark:text-[#DDF2FD]"
                 >
                   Password
                 </label>
@@ -489,7 +489,7 @@ export default function SignUpPage() {
                     autoComplete="new-password"
                     minLength={6}
                     required
-                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 pr-12 pl-12 text-sm text-[#164863] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white focus:ring-4 focus:ring-[#164863]/10"
+                    className="h-14 w-full rounded-xl border border-[#9BBEC8]/60 bg-[#DDF2FD]/30 dark:bg-[#122B3A]/40 pr-12 pl-12 text-sm text-[#164863] dark:text-[#DDF2FD] transition-all outline-none placeholder:text-gray-400 focus:border-[#164863] focus:bg-white dark:bg-[#122B3A] focus:ring-4 focus:ring-[#164863]/10"
                   />
 
                   <button
@@ -498,7 +498,7 @@ export default function SignUpPage() {
                     aria-label={
                       showPassword ? "Hide password" : "Show password"
                     }
-                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863]"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -530,7 +530,7 @@ export default function SignUpPage() {
                         <p
                           key={item.label}
                           className={`flex items-center gap-2 text-xs ${
-                            item.valid ? "text-[#164863]" : "text-gray-400"
+                            item.valid ? "text-[#164863] dark:text-[#DDF2FD]" : "text-gray-400"
                           }`}
                         >
                           <CheckCircle2 className="h-3.5 w-3.5" />
@@ -587,7 +587,7 @@ export default function SignUpPage() {
                 variant="outline"
                 onClick={() => void handleGoogleSignIn()}
                 disabled={googleLoading || isLoading}
-                className="h-13 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] hover:bg-[#DDF2FD]/40"
+                className="h-13 w-full rounded-xl border-[#9BBEC8]/60 text-sm font-semibold text-[#164863] dark:text-[#DDF2FD] hover:bg-[#DDF2FD]/40 dark:bg-[#0B1922]"
               >
                 {googleLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -621,11 +621,11 @@ export default function SignUpPage() {
 
             {/* Sign In */}
 
-            <p className="mt-8 text-center text-sm text-gray-500">
+            <p className="mt-8 text-center text-sm text-gray-500 dark:text-[#9BBEC8]">
               Already have an account?{" "}
               <Link
                 href="/sign-in"
-                className="font-bold text-[#164863] transition-colors hover:text-[#427D9D]"
+                className="font-bold text-[#164863] dark:text-[#DDF2FD] transition-colors hover:text-[#427D9D]"
               >
                 Sign In
               </Link>
@@ -636,7 +636,7 @@ export default function SignUpPage() {
             <div className="mt-10 border-t border-[#9BBEC8]/30 pt-6 text-center">
               <Link
                 href="/"
-                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863]"
+                className="text-sm font-medium text-[#427D9D] transition-colors hover:text-[#164863] dark:text-[#DDF2FD]"
               >
                 ← Back to Home
               </Link>

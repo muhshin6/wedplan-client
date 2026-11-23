@@ -60,11 +60,11 @@ This single variable drives both the proxy rewrite target and server-side fetche
 
 The deployed backend must also trust the client origin — set `CLIENT_URL=https://<client-domain>` and `BETTER_AUTH_URL=https://<server-domain>` there. The client origin is forwarded by the rewrite, so the backend's CORS/trusted-origins must allow it.
 
-Google OAuth redirect URIs (register **both** on the same OAuth client):
+Google OAuth redirect URIs (register **both** on the same OAuth client). These point at the **client** domain because the callback passes through the proxy rewrite, keeping the session cookie first-party:
 
 ```
-http://localhost:5000/api/auth/callback/google
-https://<deployed-server>/api/auth/callback/google
+http://localhost:3000/api/auth/callback/google
+https://wedplan-client-psi.vercel.app/api/auth/callback/google
 ```
 
 > Secrets (Stripe secret/webhook keys, Google OAuth secret, MongoDB credentials, ImgBB key) live **only** on the server. Never put them in `NEXT_PUBLIC_*` variables.

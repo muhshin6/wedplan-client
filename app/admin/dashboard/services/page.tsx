@@ -343,13 +343,14 @@ export default function AdminServicesPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: Math.min(index * 0.04, 0.3) }}
-              className="overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm"
+              whileHover={{ y: -6 }}
+              className="group overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-[#427D9D]/50 hover:shadow-xl hover:shadow-[#164863]/10 dark:bg-[#122B3A]"
             >
               {/* Image */}
               <div className="relative h-40 overflow-hidden bg-[#DDF2FD]">
                 {service.images?.[0] ? (
                   <div
-                    className="absolute inset-0 bg-cover bg-center"
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
                     style={{ backgroundImage: `url("${service.images[0]}")` }}
                   />
                 ) : (

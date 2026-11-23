@@ -4,13 +4,13 @@ import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import {
   AlertTriangle,
+  ArrowLeft,
   BriefcaseBusiness,
   CheckCircle2,
   Columns3,
   List,
   Loader2,
   MapPin,
-  RefreshCw,
   Search,
   SlidersHorizontal,
   Trash2,
@@ -22,6 +22,7 @@ import { toast } from "sonner"
 
 import { API_URL } from "@/lib/api"
 import { authClient } from "@/lib/auth-client"
+import Link from "next/link"
 
 interface ServiceVendor {
   name?: string
@@ -70,33 +71,6 @@ export default function AdminServicesPage() {
   const { data: session } = authClient.useSession()
   const isAdmin =
     (session?.user as { role?: string } | undefined)?.role === "admin"
-
-  const fetchServices = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/services/admin/all`, {
-        credentials: "include",
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to fetch services")
-      }
-
-      setServices(result.data)
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Something went wrong"
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleRefresh = async () => {
-    setLoading(true)
-    await fetchServices()
-  }
 
   useEffect(() => {
     let ignore = false
@@ -493,22 +467,21 @@ export default function AdminServicesPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#164863] sm:text-3xl dark:text-[#DDF2FD]">
+          <Link
+            href="/"
+            className="flex items-center text-sm font-medium text-gray-500"
+          >
+            <ArrowLeft className="h-4 w-5" />
+            Home
+          </Link>
+
+          <h1 className="mt-5 text-2xl font-bold text-[#164863] sm:text-3xl dark:text-[#DDF2FD]">
             Manage Services
           </h1>
           <p className="mt-2 text-sm text-gray-500 dark:text-[#9BBEC8]">
             Review, approve, reject and remove vendor service submissions.
           </p>
         </div>
-
-        <button
-          onClick={() => void handleRefresh()}
-          disabled={loading}
-          className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-[#9BBEC8] bg-white px-4 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#DDF2FD] disabled:opacity-50 dark:bg-[#122B3A] dark:text-[#DDF2FD]"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          Refresh
-        </button>
       </div>
 
       {/* Summary cards */}

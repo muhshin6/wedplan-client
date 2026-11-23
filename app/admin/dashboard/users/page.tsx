@@ -6,7 +6,6 @@ import { API_URL } from "@/lib/api"
 import {
   Users,
   Search,
-  RefreshCw,
   ShieldCheck,
   UserRound,
   Store,
@@ -15,8 +14,10 @@ import {
   CalendarDays,
   Ban,
   CheckCircle2,
+  ArrowLeft,
 } from "lucide-react"
 import { toast } from "sonner"
+import Link from "next/link"
 
 interface User {
   _id?: string
@@ -101,11 +102,6 @@ export default function AdminUsersPage() {
     }
   }
 
-  const handleRefresh = async () => {
-    setLoading(true)
-    await fetchUsers()
-  }
-
   useEffect(() => {
     const timer = window.setTimeout(() => {
       void fetchUsers()
@@ -157,11 +153,15 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="mb-2 text-sm font-medium text-[#427D9D]">
-            ADMINISTRATION
-          </p>
+          <Link
+            href="/"
+            className="flex items-center text-sm font-medium text-gray-500"
+          >
+            <ArrowLeft className="h-4 w-5" />
+            Home
+          </Link>
 
-          <h1 className="text-2xl font-bold text-[#164863] sm:text-3xl">
+          <h1 className="mt-4 text-2xl font-bold text-[#164863] sm:text-3xl">
             Manage Users
           </h1>
 
@@ -169,15 +169,6 @@ export default function AdminUsersPage() {
             View and monitor customer, vendor and admin accounts.
           </p>
         </div>
-
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#9BBEC8] bg-white px-4 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#DDF2FD] disabled:opacity-50"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          Refresh
-        </button>
       </div>
 
       {/* Total Users */}

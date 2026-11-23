@@ -10,9 +10,10 @@ import {
   BriefcaseBusiness,
   Clock,
   CreditCard,
-  RefreshCw,
+  ArrowLeft,
 } from "lucide-react"
 import { toast } from "sonner"
+import Link from "next/link"
 
 interface AdminStats {
   totalUsers: number
@@ -35,34 +36,6 @@ const initialStats: AdminStats = {
 export default function AdminDashboardPage() {
   const [stats, setStats] = useState<AdminStats>(initialStats)
   const [loading, setLoading] = useState(true)
-
-  const fetchAdminStats = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/admin/stats`, {
-        credentials: "include",
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(
-          result.message || "Failed to fetch dashboard statistics"
-        )
-      }
-
-      setStats(result.data)
-    } catch (error) {
-      console.error("Admin Stats Error:", error)
-
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to load dashboard statistics"
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
     let cancelled = false
@@ -159,21 +132,20 @@ export default function AdminDashboardPage() {
     },
   ]
 
-  const handleRefresh = async () => {
-    setLoading(true)
-    await fetchAdminStats()
-  }
-
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="mb-2 text-sm font-medium text-[#427D9D]">
-            ADMINISTRATION
-          </p>
+          <Link
+            href="/"
+            className="flex items-center text-sm font-medium text-gray-500"
+          >
+            <ArrowLeft className="h-4 w-5" />
+            Home
+          </Link>
 
-          <h1 className="text-2xl font-bold text-[#164863] sm:text-3xl">
+          <h1 className="mt-4 text-2xl font-bold text-[#164863] sm:text-3xl">
             Dashboard Overview
           </h1>
 
@@ -181,15 +153,6 @@ export default function AdminDashboardPage() {
             Monitor your WedPlan platform at a glance.
           </p>
         </div>
-
-        <button
-          onClick={handleRefresh}
-          disabled={loading}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#9BBEC8] bg-white px-4 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#DDF2FD] disabled:opacity-50"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          Refresh Stats
-        </button>
       </div>
 
       {/* Statistics Cards */}

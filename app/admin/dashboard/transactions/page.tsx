@@ -4,16 +4,17 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
   CreditCard,
-  RefreshCw,
   CheckCircle2,
   XCircle,
   Clock,
   CalendarDays,
   UserRound,
   Lock,
+  ArrowLeft,
 } from "lucide-react"
 import { toast } from "sonner"
 import { API_URL } from "@/lib/api"
+import Link from "next/link"
 
 interface Transaction {
   _id: string
@@ -55,28 +56,6 @@ function statusStyle(status: string) {
 export default function AdminTransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
-
-  async function loadTransactions() {
-    try {
-      const response = await fetch(`${API_URL}/api/admin/transactions`, {
-        credentials: "include",
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to fetch transactions")
-      }
-
-      setTransactions(result.data)
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to fetch transactions"
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
     let ignore = false
@@ -123,11 +102,15 @@ export default function AdminTransactionsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="mb-2 text-sm font-medium text-[#427D9D]">
-            ADMINISTRATION
-          </p>
+          <Link
+            href="/"
+            className="flex items-center text-sm font-medium text-gray-500"
+          >
+            <ArrowLeft className="h-4 w-5" />
+            Home
+          </Link>
 
-          <h1 className="text-2xl font-bold text-[#164863] sm:text-3xl">
+          <h1 className="mt-5 text-2xl font-bold text-[#164863] sm:text-3xl">
             Transactions
           </h1>
 
@@ -135,18 +118,6 @@ export default function AdminTransactionsPage() {
             Read-only payment records. Records cannot be modified manually.
           </p>
         </div>
-
-        <button
-          onClick={() => {
-            setLoading(true)
-            void loadTransactions()
-          }}
-          disabled={loading}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#9BBEC8] bg-white px-4 py-3 text-sm font-semibold text-[#164863] transition hover:bg-[#DDF2FD] disabled:opacity-50"
-        >
-          <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-          Refresh
-        </button>
       </div>
 
       {/* Read-only notice */}

@@ -15,7 +15,13 @@ import {
   X,
   CalendarHeart,
   Gem,
+  UserRound,
 } from "lucide-react"
+
+interface ServiceVendor {
+  name?: string
+  businessName?: string
+}
 
 interface Service {
   _id: string
@@ -25,6 +31,7 @@ interface Service {
   location: string
   price: number
   images: string[]
+  vendor?: ServiceVendor | null
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
@@ -79,6 +86,7 @@ export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
+  const [activeLocation, setActiveLocation] = useState("All")
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const [retryCount, setRetryCount] = useState(0)
@@ -186,7 +194,19 @@ export default function ServicesPage() {
     ),
   ]
 
-  // Filter services by search and selected category
+  // Build a unique, sorted location list for the location filter
+  const locations = [
+    "All",
+    ...Array.from(
+      new Set(
+        services
+          .map((service) => service.location?.trim())
+          .filter((location): location is string => Boolean(location))
+      )
+    ).sort((a, b) => a.localeCompare(b)),
+  ]
+
+  // Filter services by search, category and location
   const filteredServices = services.filter((service) => {
     const search = searchQuery.toLowerCase().trim()
 
@@ -208,12 +228,18 @@ export default function ServicesPage() {
         ? isPhotographyOrVideography(service.category)
         : normalizedCategory === normalizeCategory(activeCategory))
 
-    return matchesSearch && matchesCategory
+    const matchesLocation =
+      activeLocation === "All" ||
+      service.location?.trim().toLowerCase() ===
+        activeLocation.trim().toLowerCase()
+
+    return matchesSearch && matchesCategory && matchesLocation
   })
 
   // Clear all filters
   const clearFilters = () => {
     setSearchQuery("")
+    setActiveLocation("All")
     handleCategoryChange("All")
   }
 
@@ -341,7 +367,9 @@ export default function ServicesPage() {
                 BROWSE BY CATEGORY
               </p>
 
-              {(searchQuery || activeCategory !== "All") && (
+              {(searchQuery ||
+                activeCategory !== "All" ||
+                activeLocation !== "All") && (
                 <button
                   type="button"
                   onClick={clearFilters}
@@ -365,6 +393,31 @@ export default function ServicesPage() {
                   }`}
                 >
                   {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Location filter */}
+          <div className="mt-6">
+            <p className="mb-3 text-xs font-bold tracking-wider text-slate-500">
+              BROWSE BY LOCATION
+            </p>
+
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {locations.map((location) => (
+                <button
+                  key={location}
+                  type="button"
+                  onClick={() => setActiveLocation(location)}
+                  className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                    activeLocation === location
+                      ? "bg-[#427D9D] text-white shadow-lg shadow-[#427D9D]/15"
+                      : "border border-[#DDF2FD] bg-white text-slate-600 hover:border-[#9BBEC8] hover:bg-[#F4F8FB]"
+                  }`}
+                >
+                  <MapPin className="h-4 w-4" />
+                  {location}
                 </button>
               ))}
             </div>
@@ -451,7 +504,7 @@ export default function ServicesPage() {
             <p className="mt-3 text-sm text-slate-500">
               {activeCategory !== "All" && !searchQuery
                 ? `There are currently no available services in the ${activeCategory} category. Please check back later.`
-                : "We couldn't find any services matching your search or selected category."}
+                : "We couldn't find any services matching your search, category or location."}
             </p>
 
             <button
@@ -524,6 +577,16 @@ export default function ServicesPage() {
                     <p className="mt-3 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500">
                       {service.description}
                     </p>
+
+                    {/* Vendor Information */}
+                    <div className="mt-4 flex items-center gap-2 text-sm text-slate-500">
+                      <UserRound className="h-4 w-4 shrink-0 text-[#427D9D]" />
+                      <span className="truncate">
+                        {service.vendor?.name ||
+                          service.vendor?.businessName ||
+                          "WedPlan Vendor"}
+                      </span>
+                    </div>
 
                     {/* Divider */}
                     <div className="my-5 border-t border-dashed border-[#DDF2FD]" />

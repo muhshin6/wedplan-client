@@ -1,21 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { authClient } from "@/lib/auth-client"
+import { API_URL } from "@/lib/api"
+import AuthRedirect from "@/components/auth/auth-redirect"
 import {
   ArrowLeft,
   Building2,
+  Camera,
   Eye,
   EyeOff,
   KeyRound,
+  Loader2,
   Lock,
   LogOut,
   Mail,
   Save,
   Shield,
+  Trash2,
   UserRound,
 } from "lucide-react"
 
@@ -43,10 +48,15 @@ interface ProfileUser {
 function ProfileForm({ user }: { user: ProfileUser }) {
   const router = useRouter()
   const isVendor = user.role === "vendor"
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [name, setName] = useState(user.name || "")
   const [businessName, setBusinessName] = useState(user.businessName || "")
   const [savingProfile, setSavingProfile] = useState(false)
+  const [profileImage, setProfileImage] = useState<string | null>(
+    user.image || null
+  )
+  const [uploadingImage, setUploadingImage] = useState(false)
 
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -68,6 +78,86 @@ function ProfileForm({ user }: { user: ProfileUser }) {
       : user.role === "admin"
         ? "/admin/dashboard"
         : "/customer/dashboard"
+
+  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+
+    if (!file) return
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file.")
+      return
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Image must be smaller than 8 MB.")
+      return
+    }
+
+    setUploadingImage(true)
+    const toastId = toast.loading("Uploading profile photo...")
+
+    try {
+      const formData = new FormData()
+      formData.append("image", file)
+
+      const response = await fetch(`${API_URL}/api/upload/image`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to upload image.")
+      }
+
+      const update = await authClient.updateUser({ image: result.data.url })
+
+      if (update.error) {
+        throw new Error(update.error.message || "Failed to save photo.")
+      }
+
+      await authClient.getSession()
+      setProfileImage(result.data.url)
+
+      toast.success("Profile photo updated!", { id: toastId })
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload image.",
+        { id: toastId }
+      )
+    } finally {
+      setUploadingImage(false)
+      event.target.value = ""
+    }
+  }
+
+  async function handleRemoveImage() {
+    setUploadingImage(true)
+    const toastId = toast.loading("Removing profile photo...")
+
+    try {
+      const update = await authClient.updateUser({ image: "" })
+
+      if (update.error) {
+        throw new Error(update.error.message || "Failed to remove photo.")
+      }
+
+      await authClient.getSession()
+      setProfileImage(null)
+
+      toast.success("Profile photo removed.", { id: toastId })
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to remove photo.",
+        { id: toastId }
+      )
+    } finally {
+      setUploadingImage(false)
+    }
+  }
 
   async function handleProfileSubmit(event: React.FormEvent) {
     event.preventDefault()
@@ -161,8 +251,44 @@ function ProfileForm({ user }: { user: ProfileUser }) {
       {/* Profile overview */}
       <Card className="rounded-2xl border border-[#9BBEC8]/40 bg-white">
         <CardContent className="flex flex-col items-center gap-5 p-6 sm:flex-row sm:items-center">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#164863] text-2xl font-bold text-[#DDF2FD] shadow-lg shadow-[#164863]/20">
-            {initials}
+          {/* Avatar with upload button */}
+          <div className="relative shrink-0">
+            {profileImage ? (
+              <div
+                className="h-24 w-24 rounded-full border-4 border-white bg-cover bg-center shadow-lg shadow-[#164863]/20"
+                style={{ backgroundImage: `url("${profileImage}")` }}
+                role="img"
+                aria-label="Profile photo"
+              />
+            ) : (
+              <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-[#164863] text-3xl font-bold text-[#DDF2FD] shadow-lg shadow-[#164863]/20">
+                {initials}
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingImage}
+              className="absolute right-0 bottom-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#427D9D] text-[#DDF2FD] shadow-md transition hover:bg-[#164863] disabled:opacity-60"
+              aria-label="Upload profile photo"
+              title="Upload profile photo"
+            >
+              {uploadingImage ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Camera className="h-4 w-4" />
+              )}
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleImageUpload}
+              className="hidden"
+              aria-label="Choose profile photo"
+            />
           </div>
 
           <div className="min-w-0 flex-1 text-center sm:text-left">
@@ -187,6 +313,38 @@ function ProfileForm({ user }: { user: ProfileUser }) {
                 </Badge>
               )}
             </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingImage}
+                className="flex items-center gap-2 border-[#9BBEC8] text-[#164863]"
+              >
+                <Camera className="h-4 w-4" />
+                {profileImage ? "Change photo" : "Upload photo"}
+              </Button>
+
+              {profileImage && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => void handleRemoveImage()}
+                  disabled={uploadingImage}
+                  className="flex items-center gap-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Remove
+                </Button>
+              )}
+            </div>
+
+            <p className="mt-2 text-xs text-[#427D9D]/70">
+              JPG, PNG or WEBP — up to 8 MB. Stored with ImgBB.
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -389,7 +547,7 @@ function ProfileForm({ user }: { user: ProfileUser }) {
   )
 }
 
-export default function ProfileSettingsView() {
+function ProfileSettingsView() {
   const { data: session, isPending } = authClient.useSession()
 
   if (isPending) {
@@ -421,5 +579,13 @@ export default function ProfileSettingsView() {
 
   return (
     <ProfileForm key={session.user.id} user={session.user as ProfileUser} />
+  )
+}
+
+export default function ProfileSettingsPage() {
+  return (
+    <AuthRedirect>
+      <ProfileSettingsView />
+    </AuthRedirect>
   )
 }

@@ -9,17 +9,22 @@ import {
   ShieldCheck,
   UserRound,
   Store,
+  Eye,
+  X,
+  CalendarDays,
+  Ban,
+  CheckCircle2,
 } from "lucide-react"
 import { toast } from "sonner"
-import Image from "next/image"
 
 interface User {
   _id?: string
   id?: string
   name: string
   email: string
-  role: "customer" | "vendor" | "admin"
+  role: "customer" | "vendor"
   image?: string
+  isBlocked?: boolean
   createdAt?: string
 }
 
@@ -27,61 +32,107 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
+  const [roleFilter, setRoleFilter] = useState<"all" | "customer" | "vendor">(
+    "all"
+  )
+  const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
- const fetchUsers = async () => {
-   try {
-     const response = await fetch("http://localhost:5000/api/admin/users", {
-       credentials: "include",
-     })
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/admin/users", {
+        credentials: "include",
+      })
 
-     const result = await response.json()
+      const result = await response.json()
 
-     if (!response.ok) {
-       throw new Error(result.message || "Failed to fetch users")
-     }
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to fetch users")
+      }
 
-     setUsers(result.data)
-   } catch (error) {
-     console.error("Fetch Users Error:", error)
+      setUsers(result.data)
+    } catch (error) {
+      console.error("Fetch Users Error:", error)
 
-     toast.error(
-       error instanceof Error ? error.message : "Failed to fetch users"
-     )
-   } finally {
-     setLoading(false)
-   }
- }
+      toast.error(
+        error instanceof Error ? error.message : "Failed to fetch users"
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
 
- const handleRefresh = async () => {
-   setLoading(true)
-   await fetchUsers()
- }
- 
- useEffect(() => {
-   const timer = window.setTimeout(() => {
-     void fetchUsers()
-   }, 0)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-   return () => {
-     window.clearTimeout(timer)
-   }
- }, [])
+  const handleToggleBlock = async (user: User) => {
+    const id = user._id || user.id
+
+    if (!id) return
+
+    setUpdatingId(id)
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/admin/users/${id}/block`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isBlocked: !user.isBlocked }),
+        }
+      )
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to update user status")
+      }
+
+      toast.success(
+        user.isBlocked
+          ? "User unblocked successfully"
+          : "User blocked successfully"
+      )
+
+      await fetchUsers()
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update user status"
+      )
+    } finally {
+      setUpdatingId(null)
+    }
+  }
+
+  const handleRefresh = async () => {
+    setLoading(true)
+    await fetchUsers()
+  }
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void fetchUsers()
+    }, 0)
+
+    return () => {
+      window.clearTimeout(timer)
+    }
+  }, [])
 
   const filteredUsers = users.filter((user) => {
     const searchValue = search.toLowerCase()
 
-    return (
+    const matchesSearch =
       user.name?.toLowerCase().includes(searchValue) ||
       user.email?.toLowerCase().includes(searchValue) ||
       user.role?.toLowerCase().includes(searchValue)
-    )
+
+    const matchesRole = roleFilter === "all" || user.role === roleFilter
+
+    return matchesSearch && matchesRole
   })
 
   const getRoleStyle = (role: string) => {
     switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-700"
-
       case "vendor":
         return "bg-blue-100 text-blue-700"
 
@@ -160,6 +211,23 @@ export default function AdminUsersPage() {
         />
       </div>
 
+      {/* Role filter */}
+      <div className="flex flex-wrap gap-2">
+        {(["all", "customer", "vendor"] as const).map((role) => (
+          <button
+            key={role}
+            onClick={() => setRoleFilter(role)}
+            className={`rounded-xl px-4 py-2 text-sm font-semibold capitalize transition-all ${
+              roleFilter === role
+                ? "bg-[#164863] text-white shadow-md shadow-[#164863]/15"
+                : "border border-[#9BBEC8]/50 bg-white text-[#427D9D] hover:bg-[#DDF2FD]/50"
+            }`}
+          >
+            {role === "all" ? "All Roles" : role}
+          </button>
+        ))}
+      </div>
+
       {/* Users Table */}
       <div className="overflow-hidden rounded-2xl border border-[#9BBEC8]/40 bg-white shadow-sm">
         {loading ? (
@@ -203,6 +271,10 @@ export default function AdminUsersPage() {
                   <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase">
                     Joined
                   </th>
+
+                  <th className="px-6 py-4 text-xs font-semibold tracking-wider text-gray-500 uppercase">
+                    Status
+                  </th>
                 </tr>
               </thead>
 
@@ -220,12 +292,13 @@ export default function AdminUsersPage() {
                       <div className="flex items-center gap-3">
                         <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#DDF2FD] font-semibold text-[#164863]">
                           {user.image ? (
-                            <Image
-                              src={user.image}
-                              alt={user.name}
-                              fill
-                              sizes="40px"
-                              className="object-cover"
+                            <div
+                              className="absolute inset-0 bg-cover bg-center"
+                              style={{
+                                backgroundImage: `url("${user.image}")`,
+                              }}
+                              role="img"
+                              aria-label={user.name}
                             />
                           ) : (
                             user.name?.charAt(0).toUpperCase() || "U"
@@ -259,6 +332,35 @@ export default function AdminUsersPage() {
                         ? new Date(user.createdAt).toLocaleDateString()
                         : "—"}
                     </td>
+
+                    {/* Actions */}
+                    <td className="px-6 py-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => setSelectedUser(user)}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-[#9BBEC8]/50 px-3 py-1.5 text-xs font-semibold text-[#164863] transition hover:bg-[#DDF2FD]/50"
+                        >
+                          <Eye size={14} />
+                          View
+                        </button>
+
+                        <button
+                          onClick={() => void handleToggleBlock(user)}
+                          disabled={updatingId === (user._id || user.id)}
+                          className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition disabled:opacity-50 ${
+                            user.isBlocked
+                              ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                              : "bg-red-50 text-red-600 hover:bg-red-100"
+                          }`}
+                        >
+                          {updatingId === (user._id || user.id)
+                            ? "Updating..."
+                            : user.isBlocked
+                              ? "Unblock"
+                              : "Block"}
+                        </button>
+                      </div>
+                    </td>
                   </motion.tr>
                 ))}
               </tbody>
@@ -271,6 +373,115 @@ export default function AdminUsersPage() {
         <p className="text-sm text-gray-500">
           Showing {filteredUsers.length} of {users.length} users
         </p>
+      )}
+
+      {/* User Details Modal */}
+      {selectedUser && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#082B3D]/60 px-4 py-8 backdrop-blur-sm"
+          onClick={() => setSelectedUser(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            onClick={(event) => event.stopPropagation()}
+            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
+          >
+            <button
+              onClick={() => setSelectedUser(null)}
+              className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-[#164863] transition hover:bg-[#DDF2FD]"
+              aria-label="Close user details"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="bg-linear-to-br from-[#164863] to-[#427D9D] px-6 py-8 text-white">
+              <div className="flex items-center gap-4">
+                <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white/40 bg-white/15 text-xl font-bold">
+                  {selectedUser.image ? (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{
+                        backgroundImage: `url("${selectedUser.image}")`,
+                      }}
+                      role="img"
+                      aria-label={selectedUser.name}
+                    />
+                  ) : (
+                    selectedUser.name?.charAt(0).toUpperCase() || "U"
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <h2 className="truncate text-xl font-bold">
+                    {selectedUser.name}
+                  </h2>
+                  <p className="truncate text-sm text-[#DDF2FD]/80">
+                    {selectedUser.email}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4 p-6">
+              <div className="flex items-center justify-between rounded-xl bg-[#F4F8FB] px-4 py-3">
+                <span className="text-sm text-gray-500">Account Role</span>
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold capitalize ${getRoleStyle(selectedUser.role)}`}
+                >
+                  {getRoleIcon(selectedUser.role)}
+                  {selectedUser.role}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between rounded-xl bg-[#F4F8FB] px-4 py-3">
+                <span className="text-sm text-gray-500">Account Status</span>
+                <span
+                  className={`inline-flex items-center gap-1.5 text-sm font-semibold ${
+                    selectedUser.isBlocked ? "text-red-600" : "text-emerald-600"
+                  }`}
+                >
+                  {selectedUser.isBlocked ? (
+                    <Ban size={15} />
+                  ) : (
+                    <CheckCircle2 size={15} />
+                  )}
+                  {selectedUser.isBlocked ? "Blocked" : "Active"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between rounded-xl bg-[#F4F8FB] px-4 py-3">
+                <span className="text-sm text-gray-500">Joined</span>
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#164863]">
+                  <CalendarDays size={15} />
+                  {selectedUser.createdAt
+                    ? new Date(selectedUser.createdAt).toLocaleDateString()
+                    : "—"}
+                </span>
+              </div>
+
+              <div className="rounded-xl bg-[#F4F8FB] px-4 py-3">
+                <p className="text-sm text-gray-500">User ID</p>
+                <p className="mt-1 font-mono text-xs break-all text-[#164863]">
+                  {selectedUser._id || selectedUser.id || "—"}
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  void handleToggleBlock(selectedUser)
+                  setSelectedUser(null)
+                }}
+                className={`w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition ${
+                  selectedUser.isBlocked
+                    ? "bg-emerald-600 hover:bg-emerald-700"
+                    : "bg-red-600 hover:bg-red-700"
+                }`}
+              >
+                {selectedUser.isBlocked ? "Unblock User" : "Block User"}
+              </button>
+            </div>
+          </motion.div>
+        </div>
       )}
     </div>
   )

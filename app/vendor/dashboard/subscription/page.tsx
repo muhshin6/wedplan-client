@@ -86,35 +86,60 @@ export default function SubscriptionPage() {
   }, [])
 
   async function handleUpgrade(planId: string) {
-    if (planId === currentPlan) return
+    if (planId === currentPlan || planId === "free") return
 
     setUpgrading(planId)
-    const toastId = toast.loading(`Upgrading to ${planId}...`)
 
     try {
-      const response = await fetch(`${API_URL}/api/subscription/upgrade`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planId }),
-      })
+      const response = await fetch(
+        `${API_URL}/api/payment/create-checkout-session`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan: planId }),
+        }
+      )
 
       const result = await response.json()
 
       if (!response.ok || !result.success) {
-        throw new Error(result.message || "Failed to upgrade plan.")
+        throw new Error(result.message || "Failed to start checkout.")
+      }
+
+      // Redirect to Stripe-hosted checkout. Plan activation happens only
+      // after Stripe's verified webhook reaches the server.
+      window.location.assign(result.sessionUrl)
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong."
+      )
+      setUpgrading(null)
+    }
+  }
+
+  async function handleCancelSubscription() {
+    setUpgrading("cancel")
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/payment/cancel-subscription`,
+        { method: "POST", credentials: "include" }
+      )
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to cancel subscription.")
       }
 
       await authClient.getSession()
-      setCurrentPlan(planId)
-      setCurrentPlanData(result.data)
-
-      toast.success(`Upgraded to ${result.data.name} plan!`, { id: toastId })
+      setCurrentPlan("free")
+      toast.success("Subscription canceled. You are back on the Free plan.")
       router.refresh()
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Something went wrong.",
-        { id: toastId }
+        error instanceof Error ? error.message : "Something went wrong."
       )
     } finally {
       setUpgrading(null)
@@ -206,6 +231,24 @@ export default function SubscriptionPage() {
               </p>
             </div>
           </div>
+
+          {currentPlan !== "free" && (
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#9BBEC8]/30 bg-white/70 px-4 py-3">
+              <p className="text-sm text-[#427D9D]">
+                Billed monthly through Stripe. You can cancel anytime.
+              </p>
+              <Button
+                onClick={() => void handleCancelSubscription()}
+                disabled={upgrading !== null}
+                variant="outline"
+                className="border-red-200 text-red-600 hover:bg-red-50"
+              >
+                {upgrading === "cancel"
+                  ? "Canceling..."
+                  : "Cancel Subscription"}
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 

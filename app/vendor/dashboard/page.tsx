@@ -61,7 +61,7 @@ function VendorDashboardContent() {
     (booking) => booking.status === "pending"
   )
   const acceptedBookings = bookings.filter(
-    (booking) => booking.status === "confirmed"
+    (booking) => booking.status === "accepted"
   )
 
   // Fetch Vendor Services

@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer/page"
 import { Toaster } from "sonner"
+import { MotionConfig } from "framer-motion"
 import type { Metadata } from "next"
 
 const inter = Inter({
@@ -17,8 +18,6 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-heading",
 })
-
-
 
 export const metadata: Metadata = {
   title: {
@@ -65,9 +64,11 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <MotionConfig reducedMotion="user">
+            <Navbar />
+            {children}
+            <Footer />
+          </MotionConfig>
           <Toaster position="top-right" richColors />
         </ThemeProvider>
       </body>

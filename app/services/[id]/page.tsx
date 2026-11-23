@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
+import AuthRedirect from "@/components/auth/auth-redirect"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { toast } from "sonner"
@@ -24,9 +25,15 @@ import {
   Send,
   Loader2,
   User,
+  UserRound,
   Mail,
   MessageSquare,
 } from "lucide-react"
+
+interface ServiceVendor {
+  name?: string
+  businessName?: string
+}
 
 interface Service {
   _id: string
@@ -37,9 +44,10 @@ interface Service {
   location: string
   price: number
   images: string[]
+  vendor?: ServiceVendor | null
 }
 
-export default function ServiceDetailsPage() {
+function ServiceDetailsContent() {
   const params = useParams()
   const router = useRouter()
 
@@ -58,6 +66,7 @@ export default function ServiceDetailsPage() {
   const id = params.id as string
 
   const [service, setService] = useState<Service | null>(null)
+  const [activeImage, setActiveImage] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
   const [retryCount, setRetryCount] = useState(0)
@@ -81,6 +90,7 @@ export default function ServiceDetailsPage() {
         }
 
         setService(result.data)
+        setActiveImage(0)
         setError("")
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") {
@@ -201,6 +211,14 @@ export default function ServiceDetailsPage() {
 
   // Error State
   if (error || !service) {
+    const normalizedError = error.toLowerCase()
+
+    const errorHeading = normalizedError.includes("invalid service id")
+      ? "Invalid Service ID"
+      : normalizedError.includes("not found")
+        ? "Service Not Found"
+        : "Service Unavailable"
+
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#F4F8FB] px-4">
         <div className="w-full max-w-md rounded-3xl border border-[#DDF2FD] bg-white p-8 text-center shadow-sm">
@@ -209,7 +227,7 @@ export default function ServiceDetailsPage() {
           </div>
 
           <h1 className="mt-6 text-2xl font-bold text-[#164863]">
-            Service Unavailable
+            {errorHeading}
           </h1>
 
           <p className="mt-3 text-sm leading-6 text-slate-500">
@@ -278,11 +296,12 @@ export default function ServiceDetailsPage() {
             transition={{ duration: 0.6 }}
             className="group relative h-[280px] overflow-hidden rounded-[28px] bg-linear-to-br from-[#164863] to-[#9BBEC8] shadow-xl sm:h-[400px] lg:h-[480px]"
           >
-            {service.images?.[0] ? (
+            {service.images?.[activeImage] ? (
               <div
+                key={activeImage}
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
                 style={{
-                  backgroundImage: `url("${service.images[0]}")`,
+                  backgroundImage: `url("${service.images[activeImage]}")`,
                 }}
               />
             ) : (
@@ -328,6 +347,30 @@ export default function ServiceDetailsPage() {
               </div>
             </div>
           </motion.div>
+
+          {/* Image thumbnails */}
+          {service.images && service.images.length > 1 && (
+            <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+              {service.images.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => setActiveImage(index)}
+                  className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                    activeImage === index
+                      ? "border-[#164863] ring-2 ring-[#164863]/20"
+                      : "border-transparent opacity-70 hover:opacity-100"
+                  }`}
+                  aria-label={`View image ${index + 1}`}
+                >
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url("${image}")` }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -506,6 +549,15 @@ export default function ServiceDetailsPage() {
                   <div className="flex items-center gap-3 text-sm text-slate-600">
                     <Clock className="h-5 w-5 text-[#427D9D]" />
                     Discuss your event requirements
+                  </div>
+
+                  <div className="flex items-center gap-3 text-sm text-slate-600">
+                    <UserRound className="h-5 w-5 shrink-0 text-[#427D9D]" />
+                    <span className="truncate">
+                      {service.vendor?.name ||
+                        service.vendor?.businessName ||
+                        "WedPlan Vendor"}
+                    </span>
                   </div>
                 </div>
 
@@ -810,5 +862,13 @@ export default function ServiceDetailsPage() {
         </div>
       )}
     </main>
+  )
+}
+
+export default function ServiceDetailsPage() {
+  return (
+    <AuthRedirect>
+      <ServiceDetailsContent />
+    </AuthRedirect>
   )
 }

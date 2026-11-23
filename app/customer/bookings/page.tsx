@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
+import AuthRedirect from "@/components/auth/auth-redirect"
 
 interface Booking {
   _id: string
@@ -25,12 +26,12 @@ interface Booking {
   createdAt: string
 }
 
-type BookingFilter = "all" | "pending" | "approved" | "rejected" | "cancelled"
+type BookingFilter = "all" | "pending" | "accepted" | "rejected" | "cancelled"
 
 const filters: { label: string; value: BookingFilter }[] = [
   { label: "All Bookings", value: "all" },
   { label: "Pending", value: "pending" },
-  { label: "Approved", value: "approved" },
+  { label: "Accepted", value: "accepted" },
   { label: "Rejected", value: "rejected" },
   { label: "Cancelled", value: "cancelled" },
 ]
@@ -54,6 +55,7 @@ function formatDate(date: string) {
 function getStatusStyle(status: string) {
   switch (status.toLowerCase()) {
     case "approved":
+    case "accepted":
     case "confirmed":
       return "bg-green-50 text-green-700 ring-green-200"
 
@@ -71,7 +73,7 @@ function getStatusStyle(status: string) {
   }
 }
 
-export default function CustomerBookingsPage() {
+function CustomerBookingsContent() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [activeFilter, setActiveFilter] = useState<BookingFilter>("all")
   const [searchQuery, setSearchQuery] = useState("")
@@ -124,49 +126,51 @@ export default function CustomerBookingsPage() {
     }
   }, [])
 
- async function handleCancelBooking(bookingId: string) {
-   const previousBookings = bookings
+  async function handleCancelBooking(bookingId: string) {
+    const previousBookings = bookings
 
-   // Immediately remove booking from the UI
-   setBookings((prev) => prev.filter((booking) => booking._id !== bookingId))
+    // Immediately remove booking from the UI
+    setBookings((prev) => prev.filter((booking) => booking._id !== bookingId))
 
-   try {
-     setCancellingId(bookingId)
+    try {
+      setCancellingId(bookingId)
 
-     const response = await fetch(
-       `http://localhost:5000/api/bookings/customer/my-bookings/${bookingId}/cancel`,
-       {
-         method: "PATCH",
-         credentials: "include",
-       }
-     )
+      const response = await fetch(
+        `http://localhost:5000/api/bookings/customer/my-bookings/${bookingId}/cancel`,
+        {
+          method: "PATCH",
+          credentials: "include",
+        }
+      )
 
-     const result = await response.json()
+      const result = await response.json()
 
-     if (!response.ok || !result.success) {
-       throw new Error(result.message || "Failed to cancel booking.")
-     }
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to cancel booking.")
+      }
 
-     toast.success("Booking cancelled successfully.")
-   } catch (error) {
-     // Restore booking if cancellation fails
-     setBookings(previousBookings)
+      toast.success("Booking cancelled successfully.")
+    } catch (error) {
+      // Restore booking if cancellation fails
+      setBookings(previousBookings)
 
-     console.error("Cancel booking error:", error)
+      console.error("Cancel booking error:", error)
 
-     toast.error(
-       error instanceof Error ? error.message : "Something went wrong."
-     )
-   } finally {
-     setCancellingId(null)
-   }
- }
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong."
+      )
+    } finally {
+      setCancellingId(null)
+    }
+  }
 
   const filteredBookings = bookings.filter((booking) => {
     const matchesStatus =
       activeFilter === "all"
         ? booking.status !== "cancelled"
-        : booking.status === activeFilter
+        : activeFilter === "accepted"
+          ? ["accepted", "approved", "confirmed"].includes(booking.status)
+          : booking.status === activeFilter
 
     const search = searchQuery.toLowerCase()
 
@@ -431,5 +435,13 @@ export default function CustomerBookingsPage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function CustomerBookingsPage() {
+  return (
+    <AuthRedirect>
+      <CustomerBookingsContent />
+    </AuthRedirect>
   )
 }

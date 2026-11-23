@@ -13,6 +13,7 @@ import {
   XCircle,
 } from "lucide-react"
 import Link from "next/link"
+import AuthRedirect from "@/components/auth/auth-redirect"
 
 interface Booking {
   _id: string
@@ -100,6 +101,7 @@ function formatDate(date: string) {
 function getStatusStyle(status: string) {
   switch (status.toLowerCase()) {
     case "approved":
+    case "accepted":
     case "confirmed":
       return "bg-green-50 text-green-700 ring-green-200"
 
@@ -117,7 +119,7 @@ function getStatusStyle(status: string) {
   }
 }
 
-export default function CustomerDashboardPage() {
+function CustomerDashboardContent() {
   const [bookings, setBookings] = useState<Booking[]>([])
 
   const [stats, setStats] = useState<DashboardStats>({
@@ -162,7 +164,9 @@ export default function CustomerDashboardPage() {
 
           approvedBookings: customerBookings.filter(
             (booking) =>
-              booking.status === "approved" || booking.status === "confirmed"
+              booking.status === "approved" ||
+              booking.status === "accepted" ||
+              booking.status === "confirmed"
           ).length,
 
           cancelledBookings: customerBookings.filter(
@@ -467,5 +471,13 @@ export default function CustomerDashboardPage() {
         </motion.section>
       </div>
     </div>
+  )
+}
+
+export default function CustomerDashboardPage() {
+  return (
+    <AuthRedirect>
+      <CustomerDashboardContent />
+    </AuthRedirect>
   )
 }

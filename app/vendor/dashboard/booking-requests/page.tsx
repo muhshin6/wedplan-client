@@ -120,7 +120,7 @@ export default function BookingRequestsPage() {
 
   async function handleBookingStatus(
     bookingId: string,
-    status: "confirmed" | "rejected"
+    status: "accepted" | "rejected"
   ) {
     try {
       setUpdatingBookingId(bookingId)
@@ -150,7 +150,7 @@ export default function BookingRequestsPage() {
       )
 
       toast.success(
-        status === "confirmed"
+        status === "accepted"
           ? "Booking accepted successfully!"
           : "Booking rejected successfully!"
       )
@@ -169,8 +169,8 @@ export default function BookingRequestsPage() {
     (booking) => booking.status === "pending"
   ).length
 
-  const confirmedCount = bookings.filter(
-    (booking) => booking.status === "confirmed"
+  const acceptedCount = bookings.filter(
+    (booking) => booking.status === "accepted"
   ).length
 
   return (
@@ -240,7 +240,7 @@ export default function BookingRequestsPage() {
                 Accepted Bookings
               </p>
               <h2 className="mt-2 text-3xl font-bold text-[#164863] dark:text-[#DDF2FD]">
-                {confirmedCount}
+                {acceptedCount}
               </h2>
             </div>
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100 text-green-600">
@@ -303,7 +303,7 @@ export default function BookingRequestsPage() {
                     className={`w-fit rounded-full px-3 py-1.5 text-xs font-semibold capitalize ${
                       booking.status === "pending"
                         ? "bg-amber-100 text-amber-700"
-                        : booking.status === "confirmed"
+                        : booking.status === "accepted"
                           ? "bg-green-100 text-green-700"
                           : booking.status === "rejected"
                             ? "bg-red-100 text-red-700"
@@ -374,7 +374,7 @@ export default function BookingRequestsPage() {
                   <div className="mt-5 flex flex-wrap gap-3">
                     <button
                       onClick={() =>
-                        void handleBookingStatus(booking._id, "confirmed")
+                        void handleBookingStatus(booking._id, "accepted")
                       }
                       disabled={updatingBookingId === booking._id}
                       className="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-60"

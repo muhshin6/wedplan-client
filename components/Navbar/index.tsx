@@ -30,6 +30,38 @@ const navLinks = [
   { name: "Browse Services", href: "/services" },
 ]
 
+function UserAvatar({
+  name,
+  image,
+  className = "h-8 w-8",
+}: {
+  name?: string
+  image?: string | null
+  className?: string
+}) {
+  if (image) {
+    return (
+      <div
+        className={`shrink-0 rounded-full border border-[#9BBEC8]/60 bg-cover bg-center ${className}`}
+        style={{ backgroundImage: `url("${image}")` }}
+        role="img"
+        aria-label={`${name || "User"} profile image`}
+      />
+    )
+  }
+
+  return (
+    <div
+      className={`flex shrink-0 items-center justify-center rounded-full bg-[#164863] font-bold text-[#DDF2FD] ${className}`}
+      aria-label={`${name || "User"} profile`}
+    >
+      {name?.trim()?.charAt(0)?.toUpperCase() || (
+        <UserRound className="h-4 w-4" />
+      )}
+    </div>
+  )
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -44,6 +76,7 @@ export default function Navbar() {
         name: string
         email: string
         role?: string
+        image?: string | null
       }
     | undefined
 
@@ -163,23 +196,34 @@ export default function Navbar() {
                 onClick={() => setProfileOpen(!profileOpen)}
                 className="flex items-center gap-2 rounded-full border-[#9BBEC8] text-[#164863]"
               >
-                <UserRound className="h-4 w-4" />
+                <UserAvatar
+                  name={user.name}
+                  image={user.image}
+                  className="h-7 w-7 text-xs"
+                />
                 <span className="max-w-28 truncate">{user.name}</span>
                 <ChevronDown className="h-4 w-4" />
               </Button>
 
               {profileOpen && (
                 <div className="absolute top-14 right-0 z-50 w-60 rounded-2xl border border-[#9BBEC8]/50 bg-[#DDF2FD] p-2 shadow-xl">
-                  <div className="border-b border-[#9BBEC8]/50 px-3 py-3">
-                    <p className="truncate font-semibold text-[#164863]">
-                      {user.name}
-                    </p>
-                    <p className="truncate text-xs text-[#427D9D]">
-                      {user.email}
-                    </p>
-                    <span className="mt-2 inline-block rounded-full bg-[#9BBEC8]/40 px-3 py-1 text-xs font-medium text-[#164863] capitalize">
-                      {user.role || "Customer"}
-                    </span>
+                  <div className="flex items-center gap-3 border-b border-[#9BBEC8]/50 px-3 py-3">
+                    <UserAvatar
+                      name={user.name}
+                      image={user.image}
+                      className="h-11 w-11 text-base"
+                    />
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-[#164863]">
+                        {user.name}
+                      </p>
+                      <p className="truncate text-xs text-[#427D9D]">
+                        {user.email}
+                      </p>
+                      <span className="mt-1 inline-block rounded-full bg-[#9BBEC8]/40 px-3 py-1 text-xs font-medium text-[#164863] capitalize">
+                        {user.role || "Customer"}
+                      </span>
+                    </div>
                   </div>
 
                   <Link
@@ -265,16 +309,23 @@ export default function Navbar() {
                   <div className="h-10 animate-pulse rounded-xl bg-[#9BBEC8]/40" />
                 ) : user ? (
                   <div className="flex flex-col gap-3">
-                    <div className="rounded-xl bg-white/60 p-4">
-                      <p className="font-semibold text-[#164863]">
-                        {user.name}
-                      </p>
-                      <p className="mt-1 truncate text-xs text-[#427D9D]">
-                        {user.email}
-                      </p>
-                      <p className="mt-2 text-xs text-[#427D9D] capitalize">
-                        {user.role || "Customer"}
-                      </p>
+                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-4">
+                      <UserAvatar
+                        name={user.name}
+                        image={user.image}
+                        className="h-11 w-11 text-base"
+                      />
+                      <div className="min-w-0">
+                        <p className="font-semibold text-[#164863]">
+                          {user.name}
+                        </p>
+                        <p className="mt-1 truncate text-xs text-[#427D9D]">
+                          {user.email}
+                        </p>
+                        <p className="mt-1 text-xs text-[#427D9D] capitalize">
+                          {user.role || "Customer"}
+                        </p>
+                      </div>
                     </div>
 
                     <Link href={dashboardPath} onClick={() => setOpen(false)}>

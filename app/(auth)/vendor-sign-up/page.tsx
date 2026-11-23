@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type FormEvent } from "react"
+import { useRef, useState, type FormEvent } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -15,10 +15,13 @@ import {
   Sparkles,
   CheckCircle2,
   Store,
+  Camera,
+  Loader2,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
+import { API_URL } from "@/lib/api"
 
 export default function VendorSignUpPage() {
   const [name, setName] = useState("")
@@ -28,6 +31,9 @@ export default function VendorSignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [message, setMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const router = useRouter()
 
@@ -38,6 +44,53 @@ export default function VendorSignUpPage() {
   ]
 
   const strength = requirements.filter((item) => item.valid).length
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+
+    if (!file) return
+
+    if (!file.type.startsWith("image/")) {
+      setMessage("Please select a valid image file.")
+      return
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setMessage("Profile image must be smaller than 8 MB.")
+      return
+    }
+
+    setUploadingImage(true)
+    setMessage("")
+
+    try {
+      const formData = new FormData()
+      formData.append("image", file)
+
+      const response = await fetch(`${API_URL}/api/upload/image`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Image upload failed.")
+      }
+
+      setImageUrl(result.data.url)
+    } catch (uploadError) {
+      setMessage(
+        uploadError instanceof Error
+          ? uploadError.message
+          : "Failed to upload image."
+      )
+    } finally {
+      setUploadingImage(false)
+      e.target.value = ""
+    }
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -52,6 +105,7 @@ export default function VendorSignUpPage() {
           email,
           password,
           businessName,
+          image: imageUrl || undefined,
         },
         {
           headers: {
@@ -64,6 +118,9 @@ export default function VendorSignUpPage() {
         setMessage(error.message || "Registration failed.")
         return
       }
+
+      // Refresh the shared session so the Navbar updates immediately
+      await authClient.getSession()
 
       router.push("/vendor/dashboard")
       router.refresh()
@@ -163,7 +220,10 @@ export default function VendorSignUpPage() {
           >
             {/* Mobile Brand */}
 
-            <Link href="/" className="mb-10 flex items-center justify-center gap-2 lg:hidden">
+            <Link
+              href="/"
+              className="mb-10 flex items-center justify-center gap-2 lg:hidden"
+            >
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#164863]">
                 <Heart className="h-5 w-5 fill-white text-white" />
               </div>
@@ -189,6 +249,72 @@ export default function VendorSignUpPage() {
             {/* Form */}
 
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Profile Image (optional) */}
+              <div>
+                <label className="mb-2 block text-sm font-semibold text-[#164863]">
+                  Profile Image{" "}
+                  <span className="font-normal text-gray-400">(Optional)</span>
+                </label>
+
+                <div className="flex items-center gap-4">
+                  <div className="relative shrink-0">
+                    {imageUrl ? (
+                      <div
+                        className="h-16 w-16 rounded-full border-2 border-[#9BBEC8] bg-cover bg-center"
+                        style={{ backgroundImage: `url("${imageUrl}")` }}
+                        role="img"
+                        aria-label="Profile image preview"
+                      />
+                    ) : (
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-[#9BBEC8] bg-[#DDF2FD]/30 text-[#427D9D]">
+                        <UserRound className="h-6 w-6" />
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#164863] text-white shadow-md transition hover:bg-[#427D9D] disabled:opacity-60"
+                      aria-label="Upload profile image"
+                    >
+                      {uploadingImage ? (
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      ) : (
+                        <Camera className="h-3.5 w-3.5" />
+                      )}
+                    </button>
+                  </div>
+
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="text-sm font-semibold text-[#164863] hover:underline"
+                    >
+                      {uploadingImage
+                        ? "Uploading..."
+                        : imageUrl
+                          ? "Change image"
+                          : "Upload image"}
+                    </button>
+                    <p className="mt-1 text-xs text-gray-400">
+                      JPG, PNG or WEBP — up to 8 MB
+                    </p>
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    aria-label="Choose profile image"
+                  />
+                </div>
+              </div>
+
               {/* Full Name */}
 
               <div>

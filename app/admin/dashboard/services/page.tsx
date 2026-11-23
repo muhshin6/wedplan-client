@@ -15,6 +15,8 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 import { API_URL } from "@/lib/api"
+import { authClient } from "@/lib/auth-client"
+import { AlertTriangle, Loader2 } from "lucide-react"
 
 interface ServiceVendor {
   name?: string
@@ -56,6 +58,8 @@ export default function AdminServicesPage() {
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all")
+  const [deleteTarget, setDeleteTarget] = useState<Service | null>(null)
+  const { data: session } = authClient.useSession()
 
   const fetchServices = async () => {
     try {
@@ -166,8 +170,26 @@ export default function AdminServicesPage() {
     }
   }
 
-  const handleDelete = async (service: Service) => {
-    if (!window.confirm(`Delete "${service.name}" permanently?`)) return
+  function requestDelete(service: Service) {
+    // Frontend guard only — the server re-verifies the admin role on DELETE.
+    if ((session?.user as { role?: string } | undefined)?.role !== "admin") {
+      toast.error("Only administrators can delete services.")
+      return
+    }
+
+    setDeleteTarget(service)
+  }
+
+  async function confirmDelete() {
+    const service = deleteTarget
+
+    if (!service) return
+
+    if ((session?.user as { role?: string } | undefined)?.role !== "admin") {
+      toast.error("Only administrators can delete services.")
+      setDeleteTarget(null)
+      return
+    }
 
     try {
       setProcessingId(service._id)
@@ -197,6 +219,7 @@ export default function AdminServicesPage() {
       )
     } finally {
       setProcessingId(null)
+      setDeleteTarget(null)
     }
   }
 
@@ -436,7 +459,7 @@ export default function AdminServicesPage() {
                   )}
 
                   <button
-                    onClick={() => void handleDelete(service)}
+                    onClick={() => requestDelete(service)}
                     disabled={processingId === service._id}
                     className="inline-flex items-center gap-1.5 rounded-lg border border-[#9BBEC8] px-3 py-2 text-xs font-semibold text-[#164863] transition hover:bg-[#F4F8FB] disabled:opacity-50"
                   >
@@ -447,6 +470,56 @@ export default function AdminServicesPage() {
               </div>
             </motion.article>
           ))}
+        </div>
+      )}
+
+      {/* Delete confirmation — explicit admin action required */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#082B3D]/60 px-4 py-8 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-[#122B3A]"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-red-600">
+              <AlertTriangle className="h-6 w-6" />
+            </div>
+
+            <h2 className="mt-5 text-xl font-bold text-[#164863] dark:text-[#DDF2FD]">
+              Delete this service?
+            </h2>
+
+            <p className="mt-2 text-sm leading-6 text-[#427D9D] dark:text-[#9BBEC8]">
+              You are about to permanently delete{" "}
+              <span className="font-semibold text-[#164863] dark:text-[#DDF2FD]">
+                {deleteTarget.name}
+              </span>
+              . This cannot be undone and the service will disappear from all
+              listings.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="rounded-xl border border-[#9BBEC8] px-5 py-2.5 text-sm font-semibold text-[#164863] transition hover:bg-[#F4F8FB] dark:text-[#DDF2FD] dark:hover:bg-white/10"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => void confirmDelete()}
+                disabled={processingId === deleteTarget._id}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 disabled:opacity-60"
+              >
+                {processingId === deleteTarget._id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
+                Yes, delete service
+              </button>
+            </div>
+          </motion.div>
         </div>
       )}
     </div>
